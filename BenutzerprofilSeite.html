@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benutzerprofil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .inhalt {
+            flex: 1;
+        }
+
+        .navigationsleiste {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            background-color: #ddd;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .suchleiste {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            margin-right: 50px;
+        }
+
+        .suchleiste input {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            width: 300px;
+            outline: none;
+            text-align: center;
+        }
+
+        .icons span {
+            margin-left: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .linkleiste {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .linkleiste a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            background-color: #e0e0e0;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .profile-section {
+            margin-top: 20px;
+        }
+        .profile-section img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #d3d3d5;
+            border-radius: 8px;
+            width: 200px;
+        }
+        .sidebar button {
+            background-color: #e3e3e5;
+            border: none;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+        .sidebar button:hover {
+            background-color: #c3c3c5;
+        }
+        
+        .order-cards {
+            display: none; /* Anfangs ausgeblendet */
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+        }
+        .order-card {
+            width: 200px;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: left;
+        }
+        .order-card img {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .fusszeile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+
+        .soziale-icons span,
+        .hilfe-icon span {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        function handleSearch(event) {
+            if (event.key === "Enter") {
+                const searchTerm = event.target.value.toLowerCase();
+                if (searchTerm.includes("produkt 1")) {
+                    window.location.href = "LinkleisteProdukt1.html";
+                } else if (searchTerm.includes("produkt 2")) {
+                    window.location.href = "LinkleisteProdukt2.html";
+                } else {
+                    alert("Produkt nicht gefunden!");
+                }
+            }
+        }
+    </script>
+    <script>
+        // Funktion zum Anzeigen der Bestellungen
+        function zeigeBestellungen() {
+            document.getElementById("orderCards").style.display = "flex";
+            document.getElementById("settingsContent").style.display = "none";
+        }
+    
+        // Funktion zum Anzeigen der Einstellungen
+        function zeigeEinstellungen() {
+            document.getElementById("orderCards").style.display = "none";
+            document.getElementById("settingsContent").style.display = "block";
+        }
+    </script>
+    
+</head>
+<body>
+
+    <header class="navigationsleiste">
+        <a href="Linkleiste.html" class="logo">Logo</a>
+        <div class="suchleiste">
+            <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
+        </div>
+        <div class="icons">
+            <span>❤️</span>
+            <span>🛒</span>
+            <span class="icon" onclick="location.href='BenutzerprofilSeite.html'">👤</span>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="profile-section">
+            <img src="benutzerbild.png" alt="Benutzerbild">
+            <h2>Hallo, Max Mustermann</h2>
+        </div>
+    
+        <div class="sidebar">
+            <button onclick="zeigeBestellungen()">Meine Bestellungen</button>
+            <button onclick="zeigeEinstellungen()">Einstellungen</button>
+        </div>
+    
+        <!-- Bestellungsbereich -->
+        <div id="orderCards" class="order-cards" style="display: none; margin-top: 20px;">
+            <div class="order-card">
+                <img src="product_placeholder.png" alt="Produktbild">
+                <p><strong>Voraussichtliche Lieferung:</strong></p>
+                <p>Best.-Nr.: 182334</p>
+            </div>
+            <div class="order-card">
+                <img src="product_placeholder.png" alt="Produktbild">
+                <p><strong>Geliefert</strong></p>
+                <p>Best.-Nr.: 583468</p>
+                <p>Versanddatum: 12.08.2024</p>
+            </div>
+        </div>
+        
+        <!-- Einstellungsbereich -->
+        <div id="settingsContent" class="settings-content" style="display: none; margin-top: 20px;">
+            <div class="Einstellungen">
+                <p>Folgende Einstellungen können hier angepasst werden:</p>
+                <ul>
+                    <li>Sprache</li>
+                    <li>Währung</li>
+                    <li>Konto löschen</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+
+<footer class="fusszeile">
+    <div class="soziale-icons">
+        <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
+        <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa" target="_blank">🐦</a>
+        <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e" target="_blank">📘</a>
+    </div>
+    <div class="hilfe-icon">
+        <span>❓</span>
+    </div>
+</footer>
+
+</body>
+</html>
