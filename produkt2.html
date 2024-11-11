@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkt 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navigationsleiste, .fusszeile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            background-color: #ddd;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .suchleiste {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            margin-right: 50px;
+        }
+
+        .suchleiste input {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            width: 300px;
+            outline: none;
+            text-align: center;
+        }
+
+        .icons span {
+            margin-left: 20px;
+            font-size: 24px;
+        }
+
+        .produktdetails-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .groessenwahl, .beschreibung, .kontakt {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .bild-platzhalter {
+            background-color: #e0e0e0;
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .groessenwahl span {
+            display: inline-block;
+            background-color: #e0e0e0;
+            padding: 5px 10px;
+            margin-right: 5px;
+            border-radius: 4px;
+        }
+
+        .fusszeile {
+            margin-top: auto;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Gleicher Header wie auf der Hauptseite -->
+    <header class="navigationsleiste">
+        <div class="logo">Logo</div>
+        <div class="suchleiste">
+            <input type="text" placeholder="🔍 Suche eingeben...">
+        </div>
+        <div class="icons">
+            <span>❤️</span>
+            <span>🛒</span>
+            <span>👤</span>
+        </div>
+    </header>
+
+     <!-- Inhalt der Produktseite -->
+    <div class="produktdetails-content">
+        <h2>Produkt 2</h2>
+        <p>Preis: €49,99</p>
+
+        <!-- Bildplatzhalter -->
+       <div class="bild-platzhalter"></div>
+       
+        <div class="groessenwahl">
+            <span>S</span>
+            <span>M</span>
+            <span>L</span>
+            <span>XL</span>
+            <span>XXL</span>
+        </div>
+        <div class="beschreibung">
+            <p>Beschreibung:</p>
+            <ul>
+                <li>Eigenschaft A</li>
+                <li>Eigenschaft B</li>
+                <li>Eigenschaft C</li>
+            </ul>
+        </div>
+        <div class="kontakt">
+            <p>Kontakt: support@shop.com</p>
+        </div>
+    </div>
+
+    <!-- Gleicher Footer wie auf der Hauptseite -->
+    <footer class="fusszeile">
+        <div class="soziale-icons">
+            <span>📸</span>
+            <span>🐦</span>
+            <span>📘</span>
+        </div>
+        <div class="hilfe-icon">
+            <span>❓</span>
+        </div>
+    </footer>
+</body>
+</html>
