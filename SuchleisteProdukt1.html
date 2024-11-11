@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produkt 2</title>
+    <title>Produkt 1</title>
     <style>
         * {
             margin: 0;
@@ -71,20 +71,20 @@
             max-width: 600px;
         }
 
-        .groessenwahl, .beschreibung, .kontakt {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-
         .bild-platzhalter {
             background-color: #e0e0e0;
             width: 100%;
             height: 250px;
             border-radius: 8px;
             margin: 20px 0;
+        }
+
+        .groessenwahl, .beschreibung, .kontakt {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
         }
 
         .groessenwahl span {
@@ -100,13 +100,27 @@
             border-top: 1px solid #ddd;
         }
     </style>
+    <script>
+        function handleSearch(event) {
+            if (event.key === "Enter") {
+                const searchTerm = event.target.value.toLowerCase();
+                if (searchTerm.includes("produkt 1")) {
+                    window.location.href = "SuchleisteProdukt1.html";
+                } else if (searchTerm.includes("produkt 2")) {
+                    window.location.href = "SuchleisteProdukt2.html";
+                } else {
+                    alert("Produkt nicht gefunden!");
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Gleicher Header wie auf der Hauptseite -->
     <header class="navigationsleiste">
-        <a href="LogoLink.html" class="logo">Logo</a>
+        <a href="Suchleiste.html" class="logo">Logo</a>
         <div class="suchleiste">
-            <input type="text" placeholder="🔍 Suche eingeben...">
+            <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
             <span>❤️</span>
@@ -115,14 +129,14 @@
         </div>
     </header>
 
-     <!-- Inhalt der Produktseite -->
+    <!-- Inhalt der Produktseite -->
     <div class="produktdetails-content">
-        <h2>Produkt 2</h2>
-        <p>Preis: €49,99</p>
+        <h2>Produkt 1</h2>
+        <p>Preis: €29,99</p>
 
-        <!-- Bildplatzhalter -->
+       <!-- Bildplatzhalter -->
        <div class="bild-platzhalter"></div>
-       
+
         <div class="groessenwahl">
             <span>S</span>
             <span>M</span>

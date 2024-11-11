@@ -139,13 +139,27 @@
             margin-right: 10px;
         }
     </style>
+    <script>
+        function handleSearch(event) {
+            if (event.key === "Enter") {
+                const searchTerm = event.target.value.toLowerCase();
+                if (searchTerm.includes("produkt 1")) {
+                    window.location.href = "SuchleisteProdukt1.html";
+                } else if (searchTerm.includes("produkt 2")) {
+                    window.location.href = "SuchleisteProdukt2.html";
+                } else {
+                    alert("Produkt nicht gefunden!");
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Navigationsleiste -->
     <header class="navigationsleiste">
-        <a href="LogoLink.html" class="logo">Logo</a>
+        <a href="Suchleiste.html" class="logo">Logo</a>
         <div class="suchleiste">
-            <input type="text" placeholder="🔍 Suche eingeben...">
+            <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
             <span>❤️</span>
@@ -165,7 +179,7 @@
 
         <!-- Produktkarten-Bereich -->
         <main class="produktbereich">
-            <a href="LogoLinkProdukt1.html" class="produktkarte">
+            <a href="SuchleisteProdukt1.html" class="produktkarte">
                 <div class="bild-platzhalter"></div>
                 <div class="produkt-info">
                     <p class="produkt-titel">Produkt 1</p>
@@ -173,7 +187,7 @@
                     <p class="produkt-beschreibung">Ein großartiges Produkt.</p>
                 </div>
             </a>
-            <a href="LogoLinkProdukt2.html" class="produktkarte">
+            <a href="SuchleisteProdukt2.html" class="produktkarte">
                 <div class="bild-platzhalter"></div>
                 <div class="produkt-info">
                     <p class="produkt-titel">Produkt 2</p>
