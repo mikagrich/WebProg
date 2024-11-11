@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produkt 1</title>
+    <title>Link 3 Seite</title>
     <style>
-        /* Gleiche Styles wie auf der Hauptseite */
         * {
             margin: 0;
             padding: 0;
@@ -21,7 +20,11 @@
             min-height: 100vh;
         }
 
-        .navigationsleiste, .fusszeile {
+        .inhalt {
+            flex: 1;
+        }
+
+        .navigationsleiste {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -56,49 +59,85 @@
         .icons span {
             margin-left: 20px;
             font-size: 24px;
+            cursor: pointer;
         }
 
-        .produktdetails-content {
-            flex: 1;
+        .linkleiste {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
             background-color: #fff;
-            margin: 20px auto;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .linkleiste a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            background-color: #e0e0e0;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .produktbereich {
+            display: flex;
+            justify-content: center;
             padding: 20px;
+            gap: 20px;
+        }
+
+        .produktkarte {
+            background-color: #fff;
+            width: 250px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 600px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
         }
 
         .bild-platzhalter {
             background-color: #e0e0e0;
             width: 100%;
-            height: 250px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .groessenwahl, .beschreibung, .kontakt {
-            background-color: #f0f0f0;
-            padding: 10px;
+            height: 180px;
             border-radius: 8px;
             margin-bottom: 10px;
-            width: 100%;
         }
 
-        .groessenwahl span {
-            display: inline-block;
-            background-color: #e0e0e0;
-            padding: 5px 10px;
-            margin-right: 5px;
-            border-radius: 4px;
+        .produkt-info .produkt-titel {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .produkt-info .produkt-preis {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .produkt-info .produkt-beschreibung {
+            font-size: 14px;
+            color: #aaa;
         }
 
         .fusszeile {
-            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
             border-top: 1px solid #ddd;
+        }
+
+        .soziale-icons span,
+        .hilfe-icon span {
+            font-size: 20px;
+            margin-right: 10px;
         }
     </style>
     <script>
@@ -106,9 +145,9 @@
             if (event.key === "Enter") {
                 const searchTerm = event.target.value.toLowerCase();
                 if (searchTerm.includes("produkt 1")) {
-                    window.location.href = "InstagramButtonProdukt1.html";
+                    window.location.href = "LinkleisteProdukt1.html";
                 } else if (searchTerm.includes("produkt 2")) {
-                    window.location.href = "InstagramButtonProdukt2.html";
+                    window.location.href = "LinkleisteProdukt2.html";
                 } else {
                     alert("Produkt nicht gefunden!");
                 }
@@ -117,48 +156,36 @@
     </script>
 </head>
 <body>
-    <!-- Gleicher Header wie auf der Hauptseite -->
+    <!-- Navigationsleiste -->
     <header class="navigationsleiste">
-        <a href="InstagramButton.html" class="logo">Logo</a>
+        <a href="Linkleiste.html" class="logo">Logo</a>
         <div class="suchleiste">
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
             <span>❤️</span>
             <span>🛒</span>
-            <span>👤</span>
+            <span class="icon" onclick="location.href='BenutzerprofilSeite.html'">👤</span>
         </div>
     </header>
 
-    <!-- Inhalt der Produktseite -->
-    <div class="produktdetails-content">
-        <h2>Produkt 1</h2>
-        <p>Preis: €29,99</p>
+    <div class="inhalt">
+        <!-- Linkleiste (Identisch zur Hauptseite) -->
+        <nav class="linkleiste">
+            <a href="LinkleisteLink1.html">Link 1</a>
+            <a href="LinkleisteLink2.html">Link 2</a>
+            <a href="LinkleisteLink3.html">Link 3</a>
+            <a href="LinkleisteLink4.html">Link 4</a>
+        </nav>
 
-       <!-- Bildplatzhalter -->
-       <div class="bild-platzhalter"></div>
-
-        <div class="groessenwahl">
-            <span>S</span>
-            <span>M</span>
-            <span>L</span>
-            <span>XL</span>
-            <span>XXL</span>
-        </div>
-        <div class="beschreibung">
-            <p>Beschreibung:</p>
-            <ul>
-                <li>Eigenschaft A</li>
-                <li>Eigenschaft B</li>
-                <li>Eigenschaft C</li>
-            </ul>
-        </div>
-        <div class="kontakt">
-            <p>Kontakt: support@shop.com</p>
-        </div>
+        <!-- Inhalt spezifisch für diese Seite -->
+        <main style="padding: 20px;">
+            <h1>Willkommen auf Link 3 Seite</h1>
+            <p>Dies ist der Inhalt von Seite 3. Hier könnten Informationen, Produkte oder andere relevante Inhalte angezeigt werden.</p>
+        </main>
     </div>
 
-    <!-- Gleicher Footer wie auf der Hauptseite -->
+    <!-- Fußzeile -->
     <footer class="fusszeile">
         <div class="soziale-icons">
             <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
