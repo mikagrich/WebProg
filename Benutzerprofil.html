@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Benutzerprofil</title>
     <style>
+        
         * {
             margin: 0;
             padding: 0;
@@ -33,24 +34,23 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .logo {
-            background-color: #ddd;
-            padding: 10px 20px;
-            font-size: 18px;
-            font-weight: bold;
+        
+        .logo img {
+            width: 120px; 
+            height: auto;
         }
 
         .suchleiste {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            margin-right: 50px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
         }
 
         .suchleiste input {
             padding: 10px;
             border-radius: 20px;
-            border: 1px solid #ccc;
+            border: 3px solid #327347;
             width: 300px;
             outline: none;
             text-align: center;
@@ -65,8 +65,9 @@
         .linkleiste {
             display: flex;
             justify-content: center;
+            height: 56px;
             padding: 10px 0;
-            background-color: #fff;
+            background-color: #204f2e;
             border-top: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
         }
@@ -103,9 +104,9 @@
             align-items: flex-start;
             margin-top: 20px;
             padding: 10px;
-            background-color: #d3d3d5;
+            background-color: #204f2e;
             border-radius: 8px;
-            width: 200px;
+            width: 400px;
         }
         .sidebar button {
             background-color: #e3e3e5;
@@ -122,24 +123,41 @@
         }
         
         .order-cards {
-            display: none; /* Anfangs ausgeblendet */
+            display: none; 
             margin-top: 20px;
             display: flex;
             justify-content: space-around;
             width: 100%;
             max-width: 600px;
+            height: 400px;
+            cursor: pointer;
         }
         .order-card {
-            width: 200px;
+            width: 250px;
             background-color: #ffffff;
             padding: 15px;
             border-radius: 4px;
             text-align: left;
+            height: 80%;
         }
         .order-card img {
-            width: 100%;
-            border-radius: 4px;
+           width: 100%;
+            height: 180px; 
+            object-fit: cover; 
+            border-radius: 8px;
             margin-bottom: 10px;
+            border: 2px solid #ccc; 
+        }
+
+        .Einstellungen {
+            width: 100%;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: left;
+            border: 2px solid #327347;
+            height: 180px;
+            cursor: pointer;
         }
 
         .fusszeile {
@@ -165,10 +183,18 @@
         function handleSearch(event) {
             if (event.key === "Enter") {
                 const searchTerm = event.target.value.toLowerCase();
-                if (searchTerm.includes("produkt 1")) {
-                    window.location.href = "LinkleisteProdukt1.html";
-                } else if (searchTerm.includes("produkt 2")) {
-                    window.location.href = "LinkleisteProdukt2.html";
+                if (searchTerm.includes("skyhigh")) {
+                    window.location.href = "SkyhighHoodie.html";
+                } else if (searchTerm.includes("newyorkyankees")) {
+                    window.location.href = "NewyorkyankeesHoodie.html";
+                } else if (searchTerm.includes("hoodie")) {
+                    window.location.href = "Hoodie.html";
+                } else if (searchTerm.includes("pullover")) {
+                    window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("t-shirt")) {
+                    window.location.href = "T-Shirt.html";
+                } else if (searchTerm.includes("jeans")) {
+                    window.location.href = "Jeans.html";
                 } else {
                     alert("Produkt nicht gefunden!");
                 }
@@ -193,21 +219,26 @@
 <body>
 
     <header class="navigationsleiste">
-        <a href="Linkleiste.html" class="logo">Logo</a>
+        <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
         <div class="suchleiste">
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
             <span>❤️</span>
             <span>🛒</span>
-            <span class="icon" onclick="location.href='BenutzerprofilSeite.html'">👤</span>
+            <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
     </header>
 
+    <nav class="linkleiste">
+    </nav>
+
     <div class="content">
+
         <div class="profile-section">
-            <img src="benutzerbild.png" alt="Benutzerbild">
-            <h2>Hallo, Max Mustermann</h2>
+            <img src="https://rajueditor.com/wp-content/uploads/2023/12/coole-profilbilder-fur-jungs-1024x1024.jpg" alt="Benutzerbild">
+            <h2>Hallo, <br>
+                Max Mustermann</h2>
         </div>
     
         <div class="sidebar">
@@ -218,12 +249,12 @@
         <!-- Bestellungsbereich -->
         <div id="orderCards" class="order-cards" style="display: none; margin-top: 20px;">
             <div class="order-card">
-                <img src="product_placeholder.png" alt="Produktbild">
-                <p><strong>Voraussichtliche Lieferung:</strong></p>
+                <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750" alt="Produktbild">
+                <p><strong>Voraussichtliche Lieferung: 12.11.2024</strong></p>
                 <p>Best.-Nr.: 182334</p>
             </div>
             <div class="order-card">
-                <img src="product_placeholder.png" alt="Produktbild">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605" alt="Produktbild">
                 <p><strong>Geliefert</strong></p>
                 <p>Best.-Nr.: 583468</p>
                 <p>Versanddatum: 12.08.2024</p>
@@ -233,11 +264,13 @@
         <!-- Einstellungsbereich -->
         <div id="settingsContent" class="settings-content" style="display: none; margin-top: 20px;">
             <div class="Einstellungen">
-                <p>Folgende Einstellungen können hier angepasst werden:</p>
+                <p><b>Folgende Einstellungen können hier angepasst werden:</b></p>
+                <br>
                 <ul>
-                    <li>Sprache</li>
+                    <li>Sprache auswählen</li>
                     <li>Währung</li>
                     <li>Konto löschen</li>
+                    <li>Passwort ändern</li>
                 </ul>
             </div>
         </div>
