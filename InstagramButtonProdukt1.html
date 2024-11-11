@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produkt 1</title>
     <style>
+        /* Gleiche Styles wie auf der Hauptseite */
         * {
             margin: 0;
             padding: 0;
@@ -105,9 +106,9 @@
             if (event.key === "Enter") {
                 const searchTerm = event.target.value.toLowerCase();
                 if (searchTerm.includes("produkt 1")) {
-                    window.location.href = "SuchleisteProdukt1.html";
+                    window.location.href = "InstagramButtonProdukt1.html";
                 } else if (searchTerm.includes("produkt 2")) {
-                    window.location.href = "SuchleisteProdukt2.html";
+                    window.location.href = "InstagramButtonProdukt2.html";
                 } else {
                     alert("Produkt nicht gefunden!");
                 }
@@ -118,7 +119,7 @@
 <body>
     <!-- Gleicher Header wie auf der Hauptseite -->
     <header class="navigationsleiste">
-        <a href="Suchleiste.html" class="logo">Logo</a>
+        <a href="InstagramButton.html" class="logo">Logo</a>
         <div class="suchleiste">
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
@@ -160,9 +161,9 @@
     <!-- Gleicher Footer wie auf der Hauptseite -->
     <footer class="fusszeile">
         <div class="soziale-icons">
-            <span>📸</span>
-            <span>🐦</span>
-            <span>📘</span>
+            <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa" target="_blank">🐦</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e" target="_blank">📘</a>
         </div>
         <div class="hilfe-icon">
             <span>❓</span>
