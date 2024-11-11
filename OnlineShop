@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mockup Interface</title>
+    <title>Produktauswahl</title>
     <style>
         * {
             margin: 0;
@@ -11,13 +11,13 @@
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
+        body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f8;
             color: #333;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
 
         .inhalt {
@@ -40,19 +40,18 @@
             font-weight: bold;
         }
 
-        
         .suchleiste {
             flex: 1;
             display: flex;
             justify-content: center;
-            margin-left: 80px; 
+            margin-right: 50px;
         }
 
         .suchleiste input {
             padding: 10px;
             border-radius: 20px;
             border: 1px solid #ccc;
-            width: 300px; 
+            width: 300px;
             outline: none;
             text-align: center;
         }
@@ -76,7 +75,7 @@
             color: #333;
             text-decoration: none;
             font-size: 16px;
-            background-color: #e0e0e0; 
+            background-color: #e0e0e0;
             padding: 8px 15px;
             border-radius: 5px;
         }
@@ -88,21 +87,22 @@
             gap: 20px;
         }
 
-        
         .produktkarte {
             background-color: #fff;
-            width: 250px; 
-            height: 370px;
+            width: 250px;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
         }
 
         .bild-platzhalter {
             background-color: #e0e0e0;
             width: 100%;
-            height: 250px; 
+            height: 180px;
             border-radius: 8px;
             margin-bottom: 10px;
         }
@@ -141,7 +141,7 @@
     </style>
 </head>
 <body>
-    <!-- Oberes Navigationsmenü -->
+    <!-- Navigationsleiste -->
     <header class="navigationsleiste">
         <div class="logo">Logo</div>
         <div class="suchleiste">
@@ -157,52 +157,43 @@
     <div class="inhalt">
         <!-- Linkleiste -->
         <nav class="linkleiste">
-            <a href="#">T-Shirt</a>
-            <a href="#">Hoodie</a>
-            <a href="#">Pullover</a>
-            <a href="#">Jeans</a>
+            <a href="#">Link</a>
+            <a href="#">Link</a>
+            <a href="#">Link</a>
+            <a href="#">Link</a>
         </nav>
 
         <!-- Produktkarten-Bereich -->
         <main class="produktbereich">
-            <div class="produktkarte">
+            <a href="produkt1.html" class="produktkarte">
                 <div class="bild-platzhalter"></div>
                 <div class="produkt-info">
-                    <p class="produkt-titel">Produktname</p>
-                    <p class="produkt-preis">€0</p>
-                    <p class="produkt-beschreibung">Produktbeschreibung.</p>
+                    <p class="produkt-titel">Produkt 1</p>
+                    <p class="produkt-preis">€29,99</p>
+                    <p class="produkt-beschreibung">Ein großartiges Produkt.</p>
                 </div>
-            </div>
-            <div class="produktkarte">
+            </a>
+            <a href="produkt2.html" class="produktkarte">
                 <div class="bild-platzhalter"></div>
                 <div class="produkt-info">
-                    <p class="produkt-titel">Produktname</p>
-                    <p class="produkt-preis">€0</p>
-                    <p class="produkt-beschreibung">Produktbeschreibung.</p>
+                    <p class="produkt-titel">Produkt 2</p>
+                    <p class="produkt-preis">€49,99</p>
+                    <p class="produkt-beschreibung">Ein noch besseres Produkt.</p>
                 </div>
-            </div>
-            <div class="produktkarte">
-                <div class="bild-platzhalter"></div>
-                <div class="produkt-info">
-                    <p class="produkt-titel">Produktname</p>
-                    <p class="produkt-preis">€0</p>
-                    <p class="produkt-beschreibung">Produktbeschreibung.</p>
-                </div>
-            </div>
+            </a>
         </main>
     </div>
 
     <!-- Fußzeile -->
     <footer class="fusszeile">
         <div class="soziale-icons">
-            <span>📸</span> <!-- Instagram Icon -->
-            <span>🐦</span> <!-- Twitter Icon -->
-            <span>📘</span> <!-- Facebook Icon -->
+            <span>📸</span>
+            <span>🐦</span>
+            <span>📘</span>
         </div>
         <div class="hilfe-icon">
-            <span>❓</span> <!-- Hilfe Icon -->
+            <span>❓</span>
         </div>
     </footer>
-
 </body>
 </html>
