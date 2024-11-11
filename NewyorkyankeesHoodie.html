@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produkt 1</title>
+    <title>New York Yankees Hoodie</title>
     <style>
-        /* Gleiche Styles wie auf der Hauptseite */
+        
         * {
             margin: 0;
             padding: 0;
@@ -30,24 +30,24 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .logo {
-            background-color: #ddd;
-            padding: 10px 20px;
-            font-size: 18px;
-            font-weight: bold;
+        
+        .logo img {
+            width: 120px; 
+            height: auto;
         }
 
+
         .suchleiste {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            margin-right: 50px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
         }
 
         .suchleiste input {
             padding: 10px;
             border-radius: 20px;
-            border: 1px solid #ccc;
+            border: 3px solid #327347;
             width: 300px;
             outline: none;
             text-align: center;
@@ -57,6 +57,16 @@
             margin-left: 20px;
             font-size: 24px;
             cursor: pointer;
+        }
+
+        .linkleiste {
+            display: flex;
+            justify-content: center;
+            height: 56px;
+            padding: 10px 0;
+            background-color: #204f2e;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
         }
 
         .produktdetails-content {
@@ -73,11 +83,12 @@
             max-width: 600px;
         }
 
-        .bild-platzhalter {
-            background-color: #e0e0e0;
-            width: 100%;
-            height: 250px;
+        .produktdetails-content img {
+            width: 70%;
+            height: 360px; 
+            object-fit: cover; 
             border-radius: 8px;
+            border: 3px solid #ccc; 
             margin: 20px 0;
         }
 
@@ -88,6 +99,7 @@
             margin-bottom: 10px;
             width: 100%;
         }
+
 
         .groessenwahl span {
             display: inline-block;
@@ -106,10 +118,18 @@
         function handleSearch(event) {
             if (event.key === "Enter") {
                 const searchTerm = event.target.value.toLowerCase();
-                if (searchTerm.includes("produkt 1")) {
-                    window.location.href = "LinkleisteProdukt1.html";
-                } else if (searchTerm.includes("produkt 2")) {
-                    window.location.href = "LinkleisteProdukt2.html";
+                if (searchTerm.includes("skyhigh")) {
+                    window.location.href = "SkyhighHoodie.html";
+                } else if (searchTerm.includes("newyorkyankees")) {
+                    window.location.href = "NewyorkyankeesHoodie.html";
+                } else if (searchTerm.includes("hoodie")) {
+                    window.location.href = "Hoodie.html";
+                } else if (searchTerm.includes("pullover")) {
+                    window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("t-shirt")) {
+                    window.location.href = "T-Shirt.html";
+                } else if (searchTerm.includes("jeans")) {
+                    window.location.href = "Jeans.html";
                 } else {
                     alert("Produkt nicht gefunden!");
                 }
@@ -120,25 +140,27 @@
 <body>
     <!-- Gleicher Header wie auf der Hauptseite -->
     <header class="navigationsleiste">
-        <a href="Linkleiste.html" class="logo">Logo</a>
+        <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
         <div class="suchleiste">
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
             <span>❤️</span>
             <span>🛒</span>
-            <span class="icon" onclick="location.href='BenutzerprofilSeite.html'">👤</span>
+            <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
     </header>
+    
+    <nav class="linkleiste">
+    </nav>
 
-    <!-- Inhalt der Produktseite -->
+     <!-- Inhalt der Produktseite -->
     <div class="produktdetails-content">
-        <h2>Produkt 1</h2>
-        <p>Preis: €29,99</p>
+        <h2>New York Yankees Hoodie</h2>
+        <p>Preis: €59,99</p>
 
-       <!-- Bildplatzhalter -->
-       <div class="bild-platzhalter"></div>
-
+        <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445" alt="Hoodie 2">
+       
         <div class="groessenwahl">
             <span>S</span>
             <span>M</span>
@@ -149,9 +171,9 @@
         <div class="beschreibung">
             <p>Beschreibung:</p>
             <ul>
-                <li>Eigenschaft A</li>
-                <li>Eigenschaft B</li>
-                <li>Eigenschaft C</li>
+                <li>Durchgehender Reißverschluss</li>
+                <li>Gerippter Saum und Bündchen</li>
+                <li>100% Baumwolle</li>
             </ul>
         </div>
         <div class="kontakt">
