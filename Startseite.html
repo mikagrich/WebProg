@@ -110,6 +110,14 @@
             border: 2px solid #ccc; 
         }
 
+        .produkt-info {
+            position: relative;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-top: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
         .produkt-info .produkt-titel {
             font-size: 18px;
             font-weight: bold;
@@ -125,6 +133,41 @@
         .produkt-info .produkt-beschreibung {
             font-size: 14px;
             color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .favoriten-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .favoriten-button.favorit {
+            color: #e63946;
+        }
+
+         /* Style für die Benachrichtigungsanzeige */
+         .benachrichtigung {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #327347;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s ease, top 0.5s ease;
+            z-index: 1000;
+        }
+
+        .benachrichtigung.anzeigen {
+            opacity: 1;
+            top: 40px;
         }
 
         .fusszeile {
@@ -141,6 +184,7 @@
             font-size: 20px;
             margin-right: 10px;
         }
+
     </style>
     <script>
         function handleSearch(event) {
@@ -163,6 +207,51 @@
                 }
             }
         }
+
+       // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
+       function toggleFavorit(event, button, produktId) {
+            event.stopPropagation(); // Verhindert das Weiterleiten zum Produktlink
+            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            let nachricht = "";
+
+            if (favoriten.includes(produktId)) {
+                // Entfernen aus den Favoriten
+                const index = favoriten.indexOf(produktId);
+                favoriten.splice(index, 1);
+                button.classList.remove("favorit");
+                nachricht = "Produkt wurde aus den Favoriten entfernt";
+            } else {
+                // Hinzufügen zu den Favoriten
+                favoriten.push(produktId);
+                button.classList.add("favorit");
+                nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+            }
+            localStorage.setItem("favoriten", JSON.stringify(favoriten));
+            zeigeBenachrichtigung(nachricht);
+        }
+
+        // Funktion zur Anzeige der Benachrichtigung
+        function zeigeBenachrichtigung(nachricht) {
+            const benachrichtigung = document.getElementById("benachrichtigung");
+            benachrichtigung.textContent = nachricht;
+            benachrichtigung.classList.add("anzeigen");
+
+            setTimeout(() => {
+                benachrichtigung.classList.remove("anzeigen");
+            }, 3000); // Benachrichtigung nach 3 Sekunden ausblenden
+        }
+
+        function initializeFavoriten() {
+            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            document.querySelectorAll(".favoriten-button").forEach(button => {
+                const produktId = button.dataset.produktId;
+                if (favoriten.includes(produktId)) {
+                    button.classList.add("favorit");
+                }
+            });
+        }
+
+        window.onload = initializeFavoriten;
     </script>
 </head>
 <body>
@@ -173,7 +262,7 @@
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
-            <span>❤️</span>
+            <span onclick="location.href='Favoriten.html'">❤️</span>
             <span>🛒</span>
             <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
@@ -188,26 +277,35 @@
             <a href="Jeans.html">Jeans</a>
         </nav>
 
-        <!-- Produktkarten-Bereich -->
-        <main class="produktbereich">
-            <a href="SkyhighHoodie.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757" alt="Hoodie 1" />
+         <!-- Produktkarten-Bereich -->
+         <main class="produktbereich">
+            <div class="produktkarte">
+                <a href="SkyhighHoodie.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757" alt="Hoodie 1" />
+                </a>
                 <div class="produkt-info">
                     <p class="produkt-titel">Skyhigh Hoodie</p>
                     <p class="produkt-preis">€69,99</p>
                     <p class="produkt-beschreibung">Sky High Farm Universe Sky High Syracuse Hoodie</p>
+                    <span class="favoriten-button" data-produkt-id="skyhighHoodie" onclick="toggleFavorit(event, this, 'skyhighHoodie')">❤️</span>
                 </div>
-            </a>
-            <a href="NewyorkyankeesHoodie.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445" alt="Hoodie 2">
+            </div>
+            <div class="produktkarte">
+                <a href="NewyorkyankeesHoodie.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445" alt="Hoodie 2">
+                </a>
                 <div class="produkt-info">
                     <p class="produkt-titel">New York Yankees Hoodie</p>
                     <p class="produkt-preis">€59,99</p>
                     <p class="produkt-beschreibung">Sporty & Rich x '47 & The New York Yankees Serif Zip Hoodie</p>
+                    <span class="favoriten-button" data-produkt-id="nyYankeesHoodie" onclick="toggleFavorit(event, this, 'nyYankeesHoodie')">❤️</span>
                 </div>
-            </a>
+            </div>
         </main>
     </div>
+
+    <!-- Benachrichtigung -->
+    <div id="benachrichtigung" class="benachrichtigung"></div>
 
     <!-- Fußzeile -->
     <footer class="fusszeile">
