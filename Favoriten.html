@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoriten</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .inhalt {
+            flex: 1;
+        }
+
+        .navigationsleiste {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            width: 120px; 
+            height: auto;
+        }
+
+         .suchleiste {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+        }
+
+        .suchleiste input {
+            padding: 10px;
+            border-radius: 20px;
+            border: 3px solid #327347;
+            width: 300px;
+            outline: none;
+            text-align: center;
+        }
+
+        .icons span {
+            margin-left: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .linkleiste {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            background-color: #204f2e;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .linkleiste a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            background-color: #e0e0e0;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .favoriten-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .favoriten-liste {
+            width: 80%;
+            max-width: 600px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .favorit-item {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fusszeile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+
+        .soziale-icons span,
+        .hilfe-icon span {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+         function handleSearch(event) {
+            if (event.key === "Enter") {
+                const searchTerm = event.target.value.toLowerCase();
+                if (searchTerm.includes("skyhigh")) {
+                    window.location.href = "SkyhighHoodie.html";
+                } else if (searchTerm.includes("newyorkyankees")) {
+                    window.location.href = "NewyorkyankeesHoodie.html";
+                } else if (searchTerm.includes("hoodie")) {
+                    window.location.href = "Hoodie.html";
+                } else if (searchTerm.includes("pullover")) {
+                    window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("t-shirt")) {
+                    window.location.href = "T-Shirt.html";
+                } else if (searchTerm.includes("jeans")) {
+                    window.location.href = "Jeans.html";
+                } else {
+                    alert("Produkt nicht gefunden!");
+                }
+            }
+        }
+
+        function loadFavoriten() {
+            const favoriten = JSON.parse(localStorage.getItem('favoriten')) || [];
+            const favoritenListe = document.getElementById('favoritenListe');
+            favoritenListe.innerHTML = '';
+
+            if (favoriten.length === 0) {
+                favoritenListe.innerHTML = '<p>Keine Favoriten gefunden.</p>';
+            } else {
+                favoriten.forEach(produkt => {
+                    const item = document.createElement('li');
+                    item.className = 'favorit-item';
+                    item.textContent = produkt;
+                    favoritenListe.appendChild(item);
+                });
+            }
+        }
+
+        window.onload = loadFavoriten;
+    </script>
+</head>
+<body>
+  <!-- Navigationsleiste -->
+  <header class="navigationsleiste">
+    <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
+        <div class="suchleiste">
+            <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
+        </div>
+        <div class="icons">
+            <span onclick="location.href='Favoriten.html'">❤️</span>
+            <span>🛒</span>
+            <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
+        </div>
+    </header>
+
+    <div class="inhalt">
+        <!-- Linkleiste -->
+        <nav class="linkleiste">
+            <a href="Hoodie.html">Hoodie</a>
+            <a href="Pullover.html">Pullover</a>
+            <a href="T-Shirt.html">T-Shirt</a>
+            <a href="Jeans.html">Jeans</a>
+        </nav>
+
+    <div class="favoriten-content">
+        <h2>Deine Favoriten</h2>
+        <ul id="favoritenListe" class="favoriten-liste"></ul>
+    </div>
+
+     <!-- Fußzeile -->
+     <footer class="fusszeile">
+        <div class="soziale-icons">
+            <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa" target="_blank">🐦</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e" target="_blank">📘</a>
+        </div>
+        <div class="hilfe-icon">
+            <span>❓</span>
+        </div>
+    </footer>
+</body>
+</html>
