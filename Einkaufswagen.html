@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einkaufswagen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navigationsleiste {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .inhalt {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .warenkorb-produkte {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .produktkarte {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .produktkarte img {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+        }
+
+        .produkt-info {
+            flex: 1;
+        }
+
+        .produkt-titel {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .produkt-preis {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .entfernen-button {
+            font-size: 16px;
+            color: #e63946;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .leerer-warenkorb {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin-top: 50px;
+        }
+    </style>
+    <script>
+        function ladeWarenkorb() {
+            const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+            const warenkorbContainer = document.getElementById("warenkorb-produkte");
+
+            // Falls der Einkaufswagen leer ist
+            if (einkaufswagen.length === 0) {
+                warenkorbContainer.innerHTML = "<p class='leerer-warenkorb'>Ihr Einkaufswagen ist leer.</p>";
+                return;
+            }
+
+            // Produkte im Einkaufswagen anzeigen
+            einkaufswagen.forEach(produkt => {
+                const produktElement = document.createElement("div");
+                produktElement.classList.add("produktkarte");
+
+                produktElement.innerHTML = `
+                    <img src="${produkt.bild}" alt="${produkt.titel}">
+                    <div class="produkt-info">
+                        <p class="produkt-titel">${produkt.titel}</p>
+                        <p class="produkt-preis">${produkt.preis}</p>
+                    </div>
+                    <button class="entfernen-button" onclick="entferneAusWarenkorb('${produkt.id}')">Entfernen</button>
+                `;
+
+                warenkorbContainer.appendChild(produktElement);
+            });
+        }
+
+        function entferneAusWarenkorb(produktId) {
+            let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+
+            // Produkt mit der entsprechenden ID entfernen
+            einkaufswagen = einkaufswagen.filter(item => item.id !== produktId);
+
+            // Aktualisierten Einkaufswagen in localStorage speichern
+            localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
+
+            // Seite neu laden, um die Änderungen anzuzeigen
+            ladeWarenkorb();
+        }
+
+        window.onload = ladeWarenkorb;
+    </script>
+</head>
+<body>
+    <!-- Navigationsleiste -->
+    <header class="navigationsleiste">
+        <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers" width="120"></a>
+    </header>
+
+    <div class="inhalt">
+        <h1>Ihr Einkaufswagen</h1>
+        <div id="warenkorb-produkte" class="warenkorb-produkte"></div>
+    </div>
+</body>
+</html>

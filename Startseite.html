@@ -149,6 +149,19 @@
             color: #e63946;
         }
 
+        .einkaufswagen-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    color: #777;
+    cursor: pointer;
+}
+
+.einkaufswagen-button.im-einkaufswagen {
+    color: #327347; /* Grüne Farbe für Produkte im Einkaufswagen */
+}
+
          /* Style für die Benachrichtigungsanzeige */
          .benachrichtigung {
             position: fixed;
@@ -209,26 +222,59 @@
         }
 
        // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
-       function toggleFavorit(event, button, produktId) {
-            event.stopPropagation(); // Verhindert das Weiterleiten zum Produktlink
-            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-            let nachricht = "";
+       function toggleFavorit(event, button, produktId, produktInfo) {
+        event.stopPropagation(); // Navigation zur Produktseite verhindern
+        
+        // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+        let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+        const existingIndex = favoriten.findIndex(item => item.id === produktId);
+        let nachricht = "";
 
-            if (favoriten.includes(produktId)) {
-                // Entfernen aus den Favoriten
-                const index = favoriten.indexOf(produktId);
-                favoriten.splice(index, 1);
-                button.classList.remove("favorit");
-                nachricht = "Produkt wurde aus den Favoriten entfernt";
-            } else {
-                // Hinzufügen zu den Favoriten
-                favoriten.push(produktId);
-                button.classList.add("favorit");
-                nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
-            }
-            localStorage.setItem("favoriten", JSON.stringify(favoriten));
-            zeigeBenachrichtigung(nachricht);
+        if (existingIndex > -1) {
+            // Entfernen aus den Favoriten
+            favoriten.splice(existingIndex, 1);
+            button.classList.remove("favorit");
+            nachricht = "Produkt wurde aus den Favoriten entfernt";
+        } else {
+            // Hinzufügen zu den Favoriten
+            favoriten.push({ id: produktId, ...produktInfo });
+            button.classList.add("favorit");
+            nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
         }
+        
+        // Favoriten aktualisiert in localStorage speichern
+        localStorage.setItem("favoriten", JSON.stringify(favoriten));
+        
+        // Benachrichtigung anzeigen
+        zeigeBenachrichtigung(nachricht);
+    }
+
+    function toggleEinkaufswagen(event, button, produktId, produktInfo) {
+    event.stopPropagation(); // Navigation zur Produktseite verhindern
+
+    // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+    let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+    const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
+    let nachricht = "";
+
+    if (existingIndex > -1) {
+        // Entfernen aus dem Einkaufswagen
+        einkaufswagen.splice(existingIndex, 1);
+        button.classList.remove("im-einkaufswagen");
+        nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
+    } else {
+        // Hinzufügen zum Einkaufswagen
+        einkaufswagen.push({ id: produktId, ...produktInfo });
+        button.classList.add("im-einkaufswagen");
+        nachricht = "Produkt wurde in den Einkaufswagen gelegt";
+    }
+
+    // Einkaufswagen aktualisiert in localStorage speichern
+    localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
+
+    // Benachrichtigung anzeigen
+    zeigeBenachrichtigung(nachricht);
+}
 
         // Funktion zur Anzeige der Benachrichtigung
         function zeigeBenachrichtigung(nachricht) {
@@ -241,17 +287,26 @@
             }, 3000); // Benachrichtigung nach 3 Sekunden ausblenden
         }
 
-        function initializeFavoriten() {
-            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-            document.querySelectorAll(".favoriten-button").forEach(button => {
-                const produktId = button.dataset.produktId;
-                if (favoriten.includes(produktId)) {
-                    button.classList.add("favorit");
-                }
-            });
-        }
+        function initializeFavoritenUndEinkaufswagen() {
+    const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+    const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
 
-        window.onload = initializeFavoriten;
+    document.querySelectorAll(".favoriten-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (favoriten.some(item => item.id === produktId)) {
+            button.classList.add("favorit");
+        }
+    });
+
+    document.querySelectorAll(".einkaufswagen-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (einkaufswagen.some(item => item.id === produktId)) {
+            button.classList.add("im-einkaufswagen");
+        }
+    });
+}
+
+window.onload = initializeFavoritenUndEinkaufswagen;
     </script>
 </head>
 <body>
@@ -262,8 +317,8 @@
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
-            <span onclick="location.href='Favoriten.html'">❤️</span>
-            <span>🛒</span>
+            <span class="icon" onclick="location.href='Favoriten.html'">❤️</span>
+            <span class="icon" onclick="location.href='Einkaufswagen.html'">🛒</span>
             <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
     </header>
@@ -287,7 +342,18 @@
                     <p class="produkt-titel">Skyhigh Hoodie</p>
                     <p class="produkt-preis">€69,99</p>
                     <p class="produkt-beschreibung">Sky High Farm Universe Sky High Syracuse Hoodie</p>
-                    <span class="favoriten-button" data-produkt-id="skyhighHoodie" onclick="toggleFavorit(event, this, 'skyhighHoodie')">❤️</span>
+                    <span class="favoriten-button" data-produkt-id="skyhighHoodie" 
+              onclick="toggleFavorit(event, this, 'skyhighHoodie', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757', 
+                  titel: 'Skyhigh Hoodie', 
+                  preis: '€69,99'
+              })">❤️</span>
+              <span class="einkaufswagen-button" data-produkt-id="skyhighHoodie"
+              onclick="toggleEinkaufswagen(event, this, 'skyhighHoodie', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757',
+                  titel: 'Skyhigh Hoodie',
+                  preis: '€69,99'
+              })">🛒</span>
                 </div>
             </div>
             <div class="produktkarte">
@@ -298,7 +364,18 @@
                     <p class="produkt-titel">New York Yankees Hoodie</p>
                     <p class="produkt-preis">€59,99</p>
                     <p class="produkt-beschreibung">Sporty & Rich x '47 & The New York Yankees Serif Zip Hoodie</p>
-                    <span class="favoriten-button" data-produkt-id="nyYankeesHoodie" onclick="toggleFavorit(event, this, 'nyYankeesHoodie')">❤️</span>
+                    <span class="favoriten-button" data-produkt-id="nyYankeesHoodie" 
+                    onclick="toggleFavorit(event, this, 'nyYankeesHoodie', { 
+                        bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445', 
+                        titel: 'New York Yankees Hoodie', 
+                        preis: '€59,99'
+                    })">❤️</span>
+                    <span class="einkaufswagen-button" data-produkt-id="nyYankeesHoodie"
+                    onclick="toggleEinkaufswagen(event, this, 'nyYankeesHoodie', {
+                        bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445',
+                        titel: 'New York Yankees Hoodie',
+                        preis: '€59,99'
+                    })">🛒</span>
                 </div>
             </div>
         </main>

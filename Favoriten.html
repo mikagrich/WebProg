@@ -106,6 +106,43 @@
             align-items: center;
         }
 
+        .produktbereich {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .produktkarte {
+            background-color: #fff;
+            width: 250px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .produktkarte img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid #ccc;
+        }
+
+        .produkt-titel {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .produkt-preis {
+            color: #777;
+            margin-bottom: 5px;
+        }
+
         .fusszeile {
             display: flex;
             justify-content: space-between;
@@ -143,24 +180,45 @@
             }
         }
 
-        function loadFavoriten() {
-            const favoriten = JSON.parse(localStorage.getItem('favoriten')) || [];
-            const favoritenListe = document.getElementById('favoritenListe');
-            favoritenListe.innerHTML = '';
+         // Funktion zum Laden und Anzeigen der Favoriten
+        function ladeFavoriten() {
+            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            const favoritenListe = document.getElementById("favoritenListe");
 
+            // Überprüfen, ob Favoriten vorhanden sind
             if (favoriten.length === 0) {
-                favoritenListe.innerHTML = '<p>Keine Favoriten gefunden.</p>';
-            } else {
-                favoriten.forEach(produkt => {
-                    const item = document.createElement('li');
-                    item.className = 'favorit-item';
-                    item.textContent = produkt;
-                    favoritenListe.appendChild(item);
-                });
+                favoritenListe.innerHTML = "<p>Keine Favoriten vorhanden</p>";
+                return;
             }
+
+            favoritenListe.innerHTML = ""; // Falls bereits Daten vorhanden sind, leeren
+
+            // Jede Favoritenkarte erstellen
+            favoriten.forEach(produkt => {
+                const produktkarte = document.createElement("div");
+                produktkarte.classList.add("produktkarte");
+
+                produktkarte.innerHTML = `
+                    <img src="${produkt.bild}" alt="${produkt.titel}" />
+                    <p class="produkt-titel">${produkt.titel}</p>
+                    <p class="produkt-preis">${produkt.preis}</p>
+                    <button onclick="entferneFavorit('${produkt.id}')">Favorit entfernen</button>
+                `;
+
+                favoritenListe.appendChild(produktkarte);
+            });
         }
 
-        window.onload = loadFavoriten;
+        // Funktion zum Entfernen eines Produkts aus den Favoriten
+        function entferneFavorit(produktId) {
+            let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            favoriten = favoriten.filter(produkt => produkt.id !== produktId);
+            localStorage.setItem("favoriten", JSON.stringify(favoriten));
+            ladeFavoriten(); // Liste neu laden
+        }
+
+        // Favoriten laden, wenn die Seite geöffnet wird
+        window.onload = ladeFavoriten;
     </script>
 </head>
 <body>
@@ -186,10 +244,9 @@
             <a href="Jeans.html">Jeans</a>
         </nav>
 
-    <div class="favoriten-content">
-        <h2>Deine Favoriten</h2>
-        <ul id="favoritenListe" class="favoriten-liste"></ul>
-    </div>
+        <main>
+            <div class="produktbereich" id="favoritenListe"></div>
+        </main>
 
      <!-- Fußzeile -->
      <footer class="fusszeile">
