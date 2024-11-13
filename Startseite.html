@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Startseite</title>
     <style>
-        
         * {
             margin: 0;
             padding: 0;
@@ -35,11 +35,11 @@
         }
 
         .logo img {
-            width: 120px; 
+            width: 120px;
             height: auto;
         }
 
-         .suchleiste {
+        .suchleiste {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -81,17 +81,57 @@
             font-family: 'Brush Script MT', cursive;
         }
 
+        .linkleiste a:hover {
+            background-color: #9a9797;
+        }
+
+        /* Grid-Layout für Produktbereich */
         .produktbereich {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+            display: grid;
             gap: 20px;
+            padding: 20px;
+            justify-items: center;
+            /* Zentriert die Karten */
+        }
+
+        /* Standardgröße: Eine Spalte für kleinere Bildschirme */
+        .produktbereich {
+            grid-template-columns: 1fr;
+            /* Eine Spalte bei kleinen Bildschirmen */
+        }
+
+        /* Für größere Bildschirme: Zwei Spalten mit freiem Platz an den Rändern */
+        @media (min-width: 768px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten */
+                max-width: 1200px;
+                /* Maximale Breite des Containers */
+                margin: 0 auto;
+                /* Zentriert den Container */
+            }
+        }
+
+        /* Responsive Design für größere Bildschirme */
+        @media (min-width: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten bleiben */
+            }
+        }
+
+        @media (min-height: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(2, 1fr);
+                /* Zwei Spalten bleiben */
+            }
         }
 
         .produktkarte {
             background-color: #fff;
-            width: 250px;
-            height: 350px;
+            width: 100%;
+            max-width: 250px;
+            height: 365px;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -99,19 +139,25 @@
             cursor: pointer;
             text-decoration: none;
             color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .produktkarte:hover {
+            background-color: #efefef;
         }
 
         .produktkarte img {
             width: 100%;
-            height: 180px; 
-            object-fit: cover; 
+            height: 180px;
+            object-fit: cover;
             border-radius: 8px;
             margin-bottom: 10px;
-            border: 2px solid #ccc; 
+            border: 2px solid #ccc;
         }
 
         .produkt-info {
-            position: relative;
+            flex-grow: 1;
             padding-top: 10px;
             padding-bottom: 10px;
             border-top: 1px solid #ddd;
@@ -133,13 +179,17 @@
         .produkt-info .produkt-beschreibung {
             font-size: 14px;
             color: #aaa;
-            margin-bottom: 10px;
         }
 
-        .favoriten-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        /* Button-Container immer unten */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .favoriten-button,
+        .einkaufswagen-button {
             font-size: 20px;
             color: #777;
             cursor: pointer;
@@ -149,21 +199,12 @@
             color: #e63946;
         }
 
-        .einkaufswagen-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-    color: #777;
-    cursor: pointer;
-}
+        .einkaufswagen-button.im-einkaufswagen {
+            color: #327347;
+        }
 
-.einkaufswagen-button.im-einkaufswagen {
-    color: #327347; /* Grüne Farbe für Produkte im Einkaufswagen */
-}
-
-         /* Style für die Benachrichtigungsanzeige */
-         .benachrichtigung {
+        /* Benachrichtigungsanzeige */
+        .benachrichtigung {
             position: fixed;
             top: 20px;
             left: 50%;
@@ -197,7 +238,6 @@
             font-size: 20px;
             margin-right: 10px;
         }
-
     </style>
     <script>
         function handleSearch(event) {
@@ -221,60 +261,60 @@
             }
         }
 
-       // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
-       function toggleFavorit(event, button, produktId, produktInfo) {
-        event.stopPropagation(); // Navigation zur Produktseite verhindern
-        
-        // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
-        let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-        const existingIndex = favoriten.findIndex(item => item.id === produktId);
-        let nachricht = "";
+        // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
+        function toggleFavorit(event, button, produktId, produktInfo) {
+            event.stopPropagation(); // Navigation zur Produktseite verhindern
 
-        if (existingIndex > -1) {
-            // Entfernen aus den Favoriten
-            favoriten.splice(existingIndex, 1);
-            button.classList.remove("favorit");
-            nachricht = "Produkt wurde aus den Favoriten entfernt";
-        } else {
-            // Hinzufügen zu den Favoriten
-            favoriten.push({ id: produktId, ...produktInfo });
-            button.classList.add("favorit");
-            nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+            // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+            let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            const existingIndex = favoriten.findIndex(item => item.id === produktId);
+            let nachricht = "";
+
+            if (existingIndex > -1) {
+                // Entfernen aus den Favoriten
+                favoriten.splice(existingIndex, 1);
+                button.classList.remove("favorit");
+                nachricht = "Produkt wurde aus den Favoriten entfernt";
+            } else {
+                // Hinzufügen zu den Favoriten
+                favoriten.push({ id: produktId, ...produktInfo });
+                button.classList.add("favorit");
+                nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+            }
+
+            // Favoriten aktualisiert in localStorage speichern
+            localStorage.setItem("favoriten", JSON.stringify(favoriten));
+
+            // Benachrichtigung anzeigen
+            zeigeBenachrichtigung(nachricht);
         }
-        
-        // Favoriten aktualisiert in localStorage speichern
-        localStorage.setItem("favoriten", JSON.stringify(favoriten));
-        
-        // Benachrichtigung anzeigen
-        zeigeBenachrichtigung(nachricht);
-    }
 
-    function toggleEinkaufswagen(event, button, produktId, produktInfo) {
-    event.stopPropagation(); // Navigation zur Produktseite verhindern
+        function toggleEinkaufswagen(event, button, produktId, produktInfo) {
+            event.stopPropagation(); // Navigation zur Produktseite verhindern
 
-    // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
-    let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
-    const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
-    let nachricht = "";
+            // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+            let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+            const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
+            let nachricht = "";
 
-    if (existingIndex > -1) {
-        // Entfernen aus dem Einkaufswagen
-        einkaufswagen.splice(existingIndex, 1);
-        button.classList.remove("im-einkaufswagen");
-        nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
-    } else {
-        // Hinzufügen zum Einkaufswagen
-        einkaufswagen.push({ id: produktId, ...produktInfo });
-        button.classList.add("im-einkaufswagen");
-        nachricht = "Produkt wurde in den Einkaufswagen gelegt";
-    }
+            if (existingIndex > -1) {
+                // Entfernen aus dem Einkaufswagen
+                einkaufswagen.splice(existingIndex, 1);
+                button.classList.remove("im-einkaufswagen");
+                nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
+            } else {
+                // Hinzufügen zum Einkaufswagen
+                einkaufswagen.push({ id: produktId, ...produktInfo });
+                button.classList.add("im-einkaufswagen");
+                nachricht = "Produkt wurde in den Einkaufswagen gelegt";
+            }
 
-    // Einkaufswagen aktualisiert in localStorage speichern
-    localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
+            // Einkaufswagen aktualisiert in localStorage speichern
+            localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
 
-    // Benachrichtigung anzeigen
-    zeigeBenachrichtigung(nachricht);
-}
+            // Benachrichtigung anzeigen
+            zeigeBenachrichtigung(nachricht);
+        }
 
         // Funktion zur Anzeige der Benachrichtigung
         function zeigeBenachrichtigung(nachricht) {
@@ -288,31 +328,33 @@
         }
 
         function initializeFavoritenUndEinkaufswagen() {
-    const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-    const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
 
-    document.querySelectorAll(".favoriten-button").forEach(button => {
-        const produktId = button.dataset.produktId;
-        if (favoriten.some(item => item.id === produktId)) {
-            button.classList.add("favorit");
+            document.querySelectorAll(".favoriten-button").forEach(button => {
+                const produktId = button.dataset.produktId;
+                if (favoriten.some(item => item.id === produktId)) {
+                    button.classList.add("favorit");
+                }
+            });
+
+            document.querySelectorAll(".einkaufswagen-button").forEach(button => {
+                const produktId = button.dataset.produktId;
+                if (einkaufswagen.some(item => item.id === produktId)) {
+                    button.classList.add("im-einkaufswagen");
+                }
+            });
         }
-    });
 
-    document.querySelectorAll(".einkaufswagen-button").forEach(button => {
-        const produktId = button.dataset.produktId;
-        if (einkaufswagen.some(item => item.id === produktId)) {
-            button.classList.add("im-einkaufswagen");
-        }
-    });
-}
-
-window.onload = initializeFavoritenUndEinkaufswagen;
+        window.onload = initializeFavoritenUndEinkaufswagen;
     </script>
 </head>
+
 <body>
     <!-- Navigationsleiste -->
     <header class="navigationsleiste">
-    <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
+        <a href="Startseite.html" class="logo"><img
+                src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
         <div class="suchleiste">
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
@@ -332,50 +374,98 @@ window.onload = initializeFavoritenUndEinkaufswagen;
             <a href="Jeans.html">Jeans</a>
         </nav>
 
-         <!-- Produktkarten-Bereich -->
-         <main class="produktbereich">
+        <!-- Produktkarten-Bereich -->
+        <main class="produktbereich">
             <div class="produktkarte">
                 <a href="SkyhighHoodie.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757" alt="Hoodie 1" />
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757"
+                        alt="Hoodie 1" />
                 </a>
                 <div class="produkt-info">
                     <p class="produkt-titel">Skyhigh Hoodie</p>
                     <p class="produkt-preis">€69,99</p>
                     <p class="produkt-beschreibung">Sky High Farm Universe Sky High Syracuse Hoodie</p>
-                    <span class="favoriten-button" data-produkt-id="skyhighHoodie" 
-              onclick="toggleFavorit(event, this, 'skyhighHoodie', { 
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="skyhighHoodie" onclick="toggleFavorit(event, this, 'skyhighHoodie', { 
                   bild: 'https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757', 
                   titel: 'Skyhigh Hoodie', 
                   preis: '€69,99'
               })">❤️</span>
-              <span class="einkaufswagen-button" data-produkt-id="skyhighHoodie"
-              onclick="toggleEinkaufswagen(event, this, 'skyhighHoodie', {
+                        <span class="einkaufswagen-button" data-produkt-id="skyhighHoodie" onclick="toggleEinkaufswagen(event, this, 'skyhighHoodie', {
                   bild: 'https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757',
                   titel: 'Skyhigh Hoodie',
                   preis: '€69,99'
               })">🛒</span>
+                    </div>
+                </div>
+            </div>
+            <div class="produktkarte">
+                <a href="T-Shirt.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605"
+                        alt="T-Shirt 2" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">Asphaltgold T-Shirt</p>
+                    <p class="produkt-preis">€29,99</p>
+                    <p class="produkt-beschreibung">Asphaltgold Third Place T-Shirt Botanical Garden</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="asphaltgoldTshirt" onclick="toggleFavorit(event, this, 'asphaltgoldTshirt', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605', 
+                  titel: 'Asphaltgold T-Shirt', 
+                  preis: '€29,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="asphaltgoldTshirt" onclick="toggleEinkaufswagen(event, this, 'asphaltgoldTshirt', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605',
+                  titel: 'Asphaltgold T-Shirt',
+                  preis: '€29,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
+            <div class="produktkarte">
+                <a href="Jeans.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
+                        alt="Jeans 2" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">Levi´s Skate Jeans</p>
+                    <p class="produkt-preis">€99,99</p>
+                    <p class="produkt-beschreibung">Levi's Skate Baggy 5 Pocket Jeans Deep Grove</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="levisJeans" onclick="toggleFavorit(event, this, 'levisJeans', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750', 
+                  titel: 'Levi´s Skate Jeans', 
+                  preis: '€99,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="levisJeans" onclick="toggleEinkaufswagen(event, this, 'levisJeans', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750',
+                  titel: 'Levi´s Skate Jeans',
+                  preis: '€99,99'
+              })">🛒</span>
+                    </div>
                 </div>
             </div>
             <div class="produktkarte">
                 <a href="NewyorkyankeesHoodie.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445" alt="Hoodie 2">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445"
+                        alt="Hoodie 2">
                 </a>
                 <div class="produkt-info">
-                    <p class="produkt-titel">New York Yankees Hoodie</p>
+                    <p class="produkt-titel">NY Yankees Hoodie</p>
                     <p class="produkt-preis">€59,99</p>
                     <p class="produkt-beschreibung">Sporty & Rich x '47 & The New York Yankees Serif Zip Hoodie</p>
-                    <span class="favoriten-button" data-produkt-id="nyYankeesHoodie" 
-                    onclick="toggleFavorit(event, this, 'nyYankeesHoodie', { 
-                        bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445', 
-                        titel: 'New York Yankees Hoodie', 
-                        preis: '€59,99'
-                    })">❤️</span>
-                    <span class="einkaufswagen-button" data-produkt-id="nyYankeesHoodie"
-                    onclick="toggleEinkaufswagen(event, this, 'nyYankeesHoodie', {
-                        bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445',
-                        titel: 'New York Yankees Hoodie',
-                        preis: '€59,99'
-                    })">🛒</span>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="nyYankeesHoodie" onclick="toggleFavorit(event, this, 'nyYankeesHoodie', { 
+                            bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445', 
+                            titel: 'NY Yankees Hoodie', 
+                            preis: '€59,99'
+                        })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="nyYankeesHoodie" onclick="toggleEinkaufswagen(event, this, 'nyYankeesHoodie', {
+                            bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445',
+                            titel: 'NY Yankees Hoodie',
+                            preis: '€59,99'
+                        })">🛒</span>
+                    </div>
                 </div>
             </div>
         </main>
@@ -388,12 +478,15 @@ window.onload = initializeFavoritenUndEinkaufswagen;
     <footer class="fusszeile">
         <div class="soziale-icons">
             <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
-            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa" target="_blank">🐦</a>
-            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e" target="_blank">📘</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa"
+                target="_blank">🐦</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e"
+                target="_blank">📘</a>
         </div>
         <div class="hilfe-icon">
             <span>❓</span>
         </div>
     </footer>
 </body>
-</html> 
+
+</html>

@@ -33,9 +33,8 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        
         .logo img {
-            width: 120px; 
+            width: 120px;
             height: auto;
         }
 
@@ -81,16 +80,57 @@
             font-family: 'Brush Script MT', cursive;
         }
 
+        .linkleiste a:hover {
+            background-color: #9a9797;
+        }
+
+        /* Grid-Layout für Produktbereich */
         .produktbereich {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+            display: grid;
             gap: 20px;
+            padding: 20px;
+            justify-items: center;
+            /* Zentriert die Karten */
+        }
+
+        /* Standardgröße: Eine Spalte für kleinere Bildschirme */
+        .produktbereich {
+            grid-template-columns: 1fr;
+            /* Eine Spalte bei kleinen Bildschirmen */
+        }
+
+        /* Für größere Bildschirme: Zwei Spalten mit freiem Platz an den Rändern */
+        @media (min-width: 768px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten */
+                max-width: 1200px;
+                /* Maximale Breite des Containers */
+                margin: 0 auto;
+                /* Zentriert den Container */
+            }
+        }
+
+        /* Responsive Design für größere Bildschirme */
+        @media (min-width: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten bleiben */
+            }
+        }
+
+        @media (min-height: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(2, 1fr);
+                /* Zwei Spalten bleiben */
+            }
         }
 
         .produktkarte {
             background-color: #fff;
-            width: 250px;
+            width: 100%;
+            max-width: 250px;
+            height: 365px;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -98,15 +138,29 @@
             cursor: pointer;
             text-decoration: none;
             color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .produktkarte:hover {
+            background-color: #efefef;
         }
 
         .produktkarte img {
             width: 100%;
-            height: 180px; 
-            object-fit: cover; 
+            height: 180px;
+            object-fit: cover;
             border-radius: 8px;
             margin-bottom: 10px;
-            border: 2px solid #ccc; 
+            border: 2px solid #ccc;
+        }
+
+        .produkt-info {
+            flex-grow: 1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-top: 1px solid #ddd;
+            border-radius: 8px;
         }
 
         .produkt-info .produkt-titel {
@@ -124,6 +178,49 @@
         .produkt-info .produkt-beschreibung {
             font-size: 14px;
             color: #aaa;
+        }
+
+        /* Button-Container immer unten */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .favoriten-button,
+        .einkaufswagen-button {
+            font-size: 20px;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .favoriten-button.favorit {
+            color: #e63946;
+        }
+
+        .einkaufswagen-button.im-einkaufswagen {
+            color: #327347;
+        }
+
+        /* Benachrichtigungsanzeige */
+        .benachrichtigung {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #327347;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s ease, top 0.5s ease;
+            z-index: 1000;
+        }
+
+        .benachrichtigung.anzeigen {
+            opacity: 1;
+            top: 40px;
         }
 
         .fusszeile {
@@ -162,6 +259,93 @@
                 }
             }
         }
+
+       // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
+       function toggleFavorit(event, button, produktId, produktInfo) {
+        event.stopPropagation(); // Navigation zur Produktseite verhindern
+        
+        // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+        let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+        const existingIndex = favoriten.findIndex(item => item.id === produktId);
+        let nachricht = "";
+
+        if (existingIndex > -1) {
+            // Entfernen aus den Favoriten
+            favoriten.splice(existingIndex, 1);
+            button.classList.remove("favorit");
+            nachricht = "Produkt wurde aus den Favoriten entfernt";
+        } else {
+            // Hinzufügen zu den Favoriten
+            favoriten.push({ id: produktId, ...produktInfo });
+            button.classList.add("favorit");
+            nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+        }
+        
+        // Favoriten aktualisiert in localStorage speichern
+        localStorage.setItem("favoriten", JSON.stringify(favoriten));
+        
+        // Benachrichtigung anzeigen
+        zeigeBenachrichtigung(nachricht);
+    }
+
+    function toggleEinkaufswagen(event, button, produktId, produktInfo) {
+    event.stopPropagation(); // Navigation zur Produktseite verhindern
+
+    // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+    let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+    const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
+    let nachricht = "";
+
+    if (existingIndex > -1) {
+        // Entfernen aus dem Einkaufswagen
+        einkaufswagen.splice(existingIndex, 1);
+        button.classList.remove("im-einkaufswagen");
+        nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
+    } else {
+        // Hinzufügen zum Einkaufswagen
+        einkaufswagen.push({ id: produktId, ...produktInfo });
+        button.classList.add("im-einkaufswagen");
+        nachricht = "Produkt wurde in den Einkaufswagen gelegt";
+    }
+
+    // Einkaufswagen aktualisiert in localStorage speichern
+    localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
+
+    // Benachrichtigung anzeigen
+    zeigeBenachrichtigung(nachricht);
+}
+
+        // Funktion zur Anzeige der Benachrichtigung
+        function zeigeBenachrichtigung(nachricht) {
+            const benachrichtigung = document.getElementById("benachrichtigung");
+            benachrichtigung.textContent = nachricht;
+            benachrichtigung.classList.add("anzeigen");
+
+            setTimeout(() => {
+                benachrichtigung.classList.remove("anzeigen");
+            }, 3000); // Benachrichtigung nach 3 Sekunden ausblenden
+        }
+
+        function initializeFavoritenUndEinkaufswagen() {
+    const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+    const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+
+    document.querySelectorAll(".favoriten-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (favoriten.some(item => item.id === produktId)) {
+            button.classList.add("favorit");
+        }
+    });
+
+    document.querySelectorAll(".einkaufswagen-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (einkaufswagen.some(item => item.id === produktId)) {
+            button.classList.add("im-einkaufswagen");
+        }
+    });
+}
+
+window.onload = initializeFavoritenUndEinkaufswagen;
     </script>
 </head>
 <body>
@@ -172,8 +356,8 @@
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
-            <span>❤️</span>
-            <span>🛒</span>
+            <span class="icon" onclick="location.href='Favoriten.html'">❤️</span>
+            <span class="icon" onclick="location.href='Einkaufswagen.html'">🛒</span>
             <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
     </header>
@@ -196,24 +380,103 @@
 
          <!-- Produktkarten-Bereich -->
          <main class="produktbereich">
-            <a href="Jeans.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750" alt="Hoodie 1" />
-                <div class="produkt-info">
-                    <p class="produkt-titel">Levi´s Skate Jeans</p>
-                    <p class="produkt-preis">€99,99</p>
-                    <p class="produkt-beschreibung">Levi's Skate Baggy 5 Pocket Jeans Deep Grove </p>
-                </div>
-            </a>
-            <a href="Jeans.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626" alt="Hoodie 2">
+            <div class="produktkarte">
+                <a href="Jeans.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626"
+                        alt="Jeans 1" />
+                </a>
                 <div class="produkt-info">
                     <p class="produkt-titel">Butter Goods Jeans</p>
                     <p class="produkt-preis">€89,99</p>
-                    <p class="produkt-beschreibung">Butter Goods Patch Pocket Denim Jeans Washed Indigo </p>
+                    <p class="produkt-beschreibung">Butter Goods Patch Pocket Denim Jeans Washed Indigo
+                        </p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="buttergoodsJeans" onclick="toggleFavorit(event, this, 'buttergoodsJeans', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626', 
+                  titel: 'Butter Goods Jeans', 
+                  preis: '€89,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="buttergoodsJeans" onclick="toggleEinkaufswagen(event, this, 'buttergoodsJeans', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626',
+                  titel: 'Butter Goods Jeans',
+                  preis: '€89,99'
+              })">🛒</span>
+                    </div>
                 </div>
-            </a>
+            </div>
+            <div class="produktkarte">
+                <a href="Jeans.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
+                        alt="Jeans 2" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">Levi´s Skate Jeans</p>
+                    <p class="produkt-preis">€99,99</p>
+                    <p class="produkt-beschreibung">Levi's Skate Baggy 5 Pocket Jeans Deep Grove</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="levisJeans" onclick="toggleFavorit(event, this, 'levisJeans', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750', 
+                  titel: 'Levi´s Skate Jeans', 
+                  preis: '€99,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="levisJeans" onclick="toggleEinkaufswagen(event, this, 'levisJeans', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750',
+                  titel: 'Levi´s Skate Jeans',
+                  preis: '€99,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
+            <div class="produktkarte">
+                <a href="Jeans.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/c3f1224ddad761b21e0a979feb0fef483c926ba5_2411012_Daily_Paper_Settle_Macrame_Denim_Pants_Light_Blue_os_1_f2b37a0b-b852-4310-9f1f-7acdd4f8c2f4_480x480.jpg?v=1730900343"
+                        alt="Jeans 3" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">Daily Paper Jeans</p>
+                    <p class="produkt-preis">€69,99</p>
+                    <p class="produkt-beschreibung"> Daily Paper Settle Macrame Denim Pants Blue</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="dailypaperJeans" onclick="toggleFavorit(event, this, 'dailypaperJeans', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/c3f1224ddad761b21e0a979feb0fef483c926ba5_2411012_Daily_Paper_Settle_Macrame_Denim_Pants_Light_Blue_os_1_f2b37a0b-b852-4310-9f1f-7acdd4f8c2f4_480x480.jpg?v=1730900343', 
+                  titel: 'Daily Paper Jeans', 
+                  preis: '€69,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="dailypaperJeans" onclick="toggleEinkaufswagen(event, this, 'dailypaperJeans', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/c3f1224ddad761b21e0a979feb0fef483c926ba5_2411012_Daily_Paper_Settle_Macrame_Denim_Pants_Light_Blue_os_1_f2b37a0b-b852-4310-9f1f-7acdd4f8c2f4_480x480.jpg?v=1730900343',
+                  titel: 'Daily Paper Jeans',
+                  preis: '€69,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
+            <div class="produktkarte">
+                <a href="Jeans.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/o3usPrF9dMvEuN1BNQiw_POC-AW24-4200-337-0001-140-Patta-Leaves-Laser-Printed-Denim-Jeans-Blue-Denim-os-1_116eb9cd-f915-4315-bc04-c08e36c97bc8_480x480.jpg?v=1726153871"
+                        alt="Jeans 4" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">Patta Leaves Jeans</p>
+                    <p class="produkt-preis">€89,99</p>
+                    <p class="produkt-beschreibung">Patta Leaves Laser Printed new Denim Jeans</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="pattaJeans" onclick="toggleFavorit(event, this, 'pattaJeans', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/o3usPrF9dMvEuN1BNQiw_POC-AW24-4200-337-0001-140-Patta-Leaves-Laser-Printed-Denim-Jeans-Blue-Denim-os-1_116eb9cd-f915-4315-bc04-c08e36c97bc8_480x480.jpg?v=1726153871', 
+                  titel: 'Patta Leaves Jeans', 
+                  preis: '€89,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="pattaJeans" onclick="toggleEinkaufswagen(event, this, 'pattaJeans', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/o3usPrF9dMvEuN1BNQiw_POC-AW24-4200-337-0001-140-Patta-Leaves-Laser-Printed-Denim-Jeans-Blue-Denim-os-1_116eb9cd-f915-4315-bc04-c08e36c97bc8_480x480.jpg?v=1726153871',
+                  titel: 'Patta Leaves Jeans',
+                  preis: '€89,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
+    <!-- Benachrichtigung -->
+    <div id="benachrichtigung" class="benachrichtigung"></div>
 
     <!-- Fußzeile -->
     <footer class="fusszeile">
