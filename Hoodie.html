@@ -33,9 +33,8 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        
         .logo img {
-            width: 120px; 
+            width: 120px;
             height: auto;
         }
 
@@ -81,16 +80,57 @@
             font-family: 'Brush Script MT', cursive;
         }
 
+        .linkleiste a:hover {
+            background-color: #9a9797;
+        }
+
+        /* Grid-Layout für Produktbereich */
         .produktbereich {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+            display: grid;
             gap: 20px;
+            padding: 20px;
+            justify-items: center;
+            /* Zentriert die Karten */
+        }
+
+        /* Standardgröße: Eine Spalte für kleinere Bildschirme */
+        .produktbereich {
+            grid-template-columns: 1fr;
+            /* Eine Spalte bei kleinen Bildschirmen */
+        }
+
+        /* Für größere Bildschirme: Zwei Spalten mit freiem Platz an den Rändern */
+        @media (min-width: 768px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten */
+                max-width: 1200px;
+                /* Maximale Breite des Containers */
+                margin: 0 auto;
+                /* Zentriert den Container */
+            }
+        }
+
+        /* Responsive Design für größere Bildschirme */
+        @media (min-width: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten bleiben */
+            }
+        }
+
+        @media (min-height: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(2, 1fr);
+                /* Zwei Spalten bleiben */
+            }
         }
 
         .produktkarte {
             background-color: #fff;
-            width: 250px;
+            width: 100%;
+            max-width: 250px;
+            height: 365px;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -98,15 +138,29 @@
             cursor: pointer;
             text-decoration: none;
             color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .produktkarte:hover {
+            background-color: #efefef;
         }
 
         .produktkarte img {
             width: 100%;
-            height: 180px; 
+            height: 180px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 10px;
-            border: 2px solid #ccc; 
+            border: 2px solid #ccc;
+        }
+
+        .produkt-info {
+            flex-grow: 1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-top: 1px solid #ddd;
+            border-radius: 8px;
         }
 
         .produkt-info .produkt-titel {
@@ -124,6 +178,49 @@
         .produkt-info .produkt-beschreibung {
             font-size: 14px;
             color: #aaa;
+        }
+
+        /* Button-Container immer unten */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .favoriten-button,
+        .einkaufswagen-button {
+            font-size: 20px;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .favoriten-button.favorit {
+            color: #e63946;
+        }
+
+        .einkaufswagen-button.im-einkaufswagen {
+            color: #327347;
+        }
+
+        /* Benachrichtigungsanzeige */
+        .benachrichtigung {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #327347;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s ease, top 0.5s ease;
+            z-index: 1000;
+        }
+
+        .benachrichtigung.anzeigen {
+            opacity: 1;
+            top: 40px;
         }
 
         .fusszeile {
@@ -162,6 +259,93 @@
                 }
             }
         }
+
+       // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
+       function toggleFavorit(event, button, produktId, produktInfo) {
+        event.stopPropagation(); // Navigation zur Produktseite verhindern
+        
+        // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+        let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+        const existingIndex = favoriten.findIndex(item => item.id === produktId);
+        let nachricht = "";
+
+        if (existingIndex > -1) {
+            // Entfernen aus den Favoriten
+            favoriten.splice(existingIndex, 1);
+            button.classList.remove("favorit");
+            nachricht = "Produkt wurde aus den Favoriten entfernt";
+        } else {
+            // Hinzufügen zu den Favoriten
+            favoriten.push({ id: produktId, ...produktInfo });
+            button.classList.add("favorit");
+            nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+        }
+        
+        // Favoriten aktualisiert in localStorage speichern
+        localStorage.setItem("favoriten", JSON.stringify(favoriten));
+        
+        // Benachrichtigung anzeigen
+        zeigeBenachrichtigung(nachricht);
+    }
+
+    function toggleEinkaufswagen(event, button, produktId, produktInfo) {
+    event.stopPropagation(); // Navigation zur Produktseite verhindern
+
+    // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+    let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+    const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
+    let nachricht = "";
+
+    if (existingIndex > -1) {
+        // Entfernen aus dem Einkaufswagen
+        einkaufswagen.splice(existingIndex, 1);
+        button.classList.remove("im-einkaufswagen");
+        nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
+    } else {
+        // Hinzufügen zum Einkaufswagen
+        einkaufswagen.push({ id: produktId, ...produktInfo });
+        button.classList.add("im-einkaufswagen");
+        nachricht = "Produkt wurde in den Einkaufswagen gelegt";
+    }
+
+    // Einkaufswagen aktualisiert in localStorage speichern
+    localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
+
+    // Benachrichtigung anzeigen
+    zeigeBenachrichtigung(nachricht);
+}
+
+        // Funktion zur Anzeige der Benachrichtigung
+        function zeigeBenachrichtigung(nachricht) {
+            const benachrichtigung = document.getElementById("benachrichtigung");
+            benachrichtigung.textContent = nachricht;
+            benachrichtigung.classList.add("anzeigen");
+
+            setTimeout(() => {
+                benachrichtigung.classList.remove("anzeigen");
+            }, 3000); // Benachrichtigung nach 3 Sekunden ausblenden
+        }
+
+        function initializeFavoritenUndEinkaufswagen() {
+    const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+    const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+
+    document.querySelectorAll(".favoriten-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (favoriten.some(item => item.id === produktId)) {
+            button.classList.add("favorit");
+        }
+    });
+
+    document.querySelectorAll(".einkaufswagen-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (einkaufswagen.some(item => item.id === produktId)) {
+            button.classList.add("im-einkaufswagen");
+        }
+    });
+}
+
+window.onload = initializeFavoritenUndEinkaufswagen;
     </script>
 </head>
 <body>
@@ -172,8 +356,8 @@
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
-            <span>❤️</span>
-            <span>🛒</span>
+            <span class="icon" onclick="location.href='Favoriten.html'">❤️</span>
+            <span class="icon" onclick="location.href='Einkaufswagen.html'">🛒</span>
             <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
     </header>
@@ -194,26 +378,105 @@
             <p>Viel Spaß beim shoppen!</p>
         </main>
 
-         <!-- Produktkarten-Bereich -->
-         <main class="produktbereich">
-            <a href="SkyhighHoodie.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757" alt="Hoodie 1" />
+          <!-- Produktkarten-Bereich -->
+          <main class="produktbereich">
+            <div class="produktkarte">
+                <a href="SkyhighHoodie.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757"
+                        alt="Hoodie 1" />
+                </a>
                 <div class="produkt-info">
                     <p class="produkt-titel">Skyhigh Hoodie</p>
                     <p class="produkt-preis">€69,99</p>
                     <p class="produkt-beschreibung">Sky High Farm Universe Sky High Syracuse Hoodie</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="skyhighHoodie" onclick="toggleFavorit(event, this, 'skyhighHoodie', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757', 
+                  titel: 'Skyhigh Hoodie', 
+                  preis: '€69,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="skyhighHoodie" onclick="toggleEinkaufswagen(event, this, 'skyhighHoodie', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757',
+                  titel: 'Skyhigh Hoodie',
+                  preis: '€69,99'
+              })">🛒</span>
+                    </div>
                 </div>
-            </a>
-            <a href="NewyorkyankeesHoodie.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445" alt="Hoodie 2">
+            </div>
+            <div class="produktkarte">
+                <a href="NewyorkyankeesHoodie.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445"
+                        alt="Hoodie 2">
+                </a>
                 <div class="produkt-info">
-                    <p class="produkt-titel">New York Yankees Hoodie</p>
+                    <p class="produkt-titel">NY Yankees Hoodie</p>
                     <p class="produkt-preis">€59,99</p>
                     <p class="produkt-beschreibung">Sporty & Rich x '47 & The New York Yankees Serif Zip Hoodie</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="nyYankeesHoodie" onclick="toggleFavorit(event, this, 'nyYankeesHoodie', { 
+                            bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445', 
+                            titel: 'NY Yankees Hoodie', 
+                            preis: '€59,99'
+                        })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="nyYankeesHoodie" onclick="toggleEinkaufswagen(event, this, 'nyYankeesHoodie', {
+                            bild: 'https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445',
+                            titel: 'NY Yankees Hoodie',
+                            preis: '€59,99'
+                        })">🛒</span>
+                    </div>
                 </div>
-            </a>
+            </div>
+            <div class="produktkarte">
+                <a href="AsphaltgoldHoodie.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/ed4b16157349aa4a69fb9b408c664a6d3dfd5590_ag0663_Asphaltgold_Essential_Hoodie_Racing_Green_os_1_480x480.jpg?v=1731425844"
+                        alt="Hoodie 3" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">Asphaltgold Hoodie</p>
+                    <p class="produkt-preis">€49,99</p>
+                    <p class="produkt-beschreibung"> Asphaltgold Essential Hoodie Racing Green</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="asphaltgoldHoodie" onclick="toggleFavorit(event, this, 'asphaltgoldHoodie', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/ed4b16157349aa4a69fb9b408c664a6d3dfd5590_ag0663_Asphaltgold_Essential_Hoodie_Racing_Green_os_1_480x480.jpg?v=1731425844', 
+                  titel: 'Asphaltgold Hoodie', 
+                  preis: '€49,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="asphaltgoldHoodie" onclick="toggleEinkaufswagen(event, this, 'asphaltgoldHoodie', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/ed4b16157349aa4a69fb9b408c664a6d3dfd5590_ag0663_Asphaltgold_Essential_Hoodie_Racing_Green_os_1_480x480.jpg?v=1731425844',
+                  titel: 'Asphaltgold Hoodie',
+                  preis: '€49,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
+            <div class="produktkarte">
+                <a href="DimeHoodie.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/Sz3o55XJcyyIohl7DS6A_DIMEFA2417ASH-Dime-VLT-Hoodie-Ash-OS-1_480x480.jpg?v=1730814795"
+                        alt="Hoodie 4" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">Dime Hoodie</p>
+                    <p class="produkt-preis">€99,99</p>
+                    <p class="produkt-beschreibung"> Dime VLT New Universe Hoodie Ash</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="dimeHoodie" onclick="toggleFavorit(event, this, 'dimeHoodie', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/Sz3o55XJcyyIohl7DS6A_DIMEFA2417ASH-Dime-VLT-Hoodie-Ash-OS-1_480x480.jpg?v=1730814795', 
+                  titel: 'Dime Hoodie', 
+                  preis: '€99,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="dimeHoodie" onclick="toggleEinkaufswagen(event, this, 'dimeHoodie', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/Sz3o55XJcyyIohl7DS6A_DIMEFA2417ASH-Dime-VLT-Hoodie-Ash-OS-1_480x480.jpg?v=1730814795',
+                  titel: 'Dime Hoodie',
+                  preis: '€99,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
+
+    <!-- Benachrichtigung -->
+    <div id="benachrichtigung" class="benachrichtigung"></div>
 
     <!-- Fußzeile -->
     <footer class="fusszeile">

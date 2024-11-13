@@ -34,7 +34,7 @@
         }
 
         .logo img {
-            width: 120px; 
+            width: 120px;
             height: auto;
         }
 
@@ -80,16 +80,57 @@
             font-family: 'Brush Script MT', cursive;
         }
 
+        .linkleiste a:hover {
+            background-color: #9a9797;
+        }
+
+        /* Grid-Layout für Produktbereich */
         .produktbereich {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+            display: grid;
             gap: 20px;
+            padding: 20px;
+            justify-items: center;
+            /* Zentriert die Karten */
+        }
+
+        /* Standardgröße: Eine Spalte für kleinere Bildschirme */
+        .produktbereich {
+            grid-template-columns: 1fr;
+            /* Eine Spalte bei kleinen Bildschirmen */
+        }
+
+        /* Für größere Bildschirme: Zwei Spalten mit freiem Platz an den Rändern */
+        @media (min-width: 768px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten */
+                max-width: 1200px;
+                /* Maximale Breite des Containers */
+                margin: 0 auto;
+                /* Zentriert den Container */
+            }
+        }
+
+        /* Responsive Design für größere Bildschirme */
+        @media (min-width: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(4, 1fr);
+                /* Zwei Spalten bleiben */
+            }
+        }
+
+        @media (min-height: 1024px) {
+            .produktbereich {
+                grid-template-columns: repeat(2, 1fr);
+                /* Zwei Spalten bleiben */
+            }
         }
 
         .produktkarte {
             background-color: #fff;
-            width: 250px;
+            width: 100%;
+            max-width: 250px;
+            height: 365px;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -97,15 +138,29 @@
             cursor: pointer;
             text-decoration: none;
             color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .produktkarte:hover {
+            background-color: #efefef;
         }
 
         .produktkarte img {
             width: 100%;
-            height: 180px; 
-            object-fit: cover; 
+            height: 180px;
+            object-fit: cover;
             border-radius: 8px;
             margin-bottom: 10px;
-            border: 2px solid #ccc; 
+            border: 2px solid #ccc;
+        }
+
+        .produkt-info {
+            flex-grow: 1;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-top: 1px solid #ddd;
+            border-radius: 8px;
         }
 
         .produkt-info .produkt-titel {
@@ -123,6 +178,49 @@
         .produkt-info .produkt-beschreibung {
             font-size: 14px;
             color: #aaa;
+        }
+
+        /* Button-Container immer unten */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .favoriten-button,
+        .einkaufswagen-button {
+            font-size: 20px;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .favoriten-button.favorit {
+            color: #e63946;
+        }
+
+        .einkaufswagen-button.im-einkaufswagen {
+            color: #327347;
+        }
+
+        /* Benachrichtigungsanzeige */
+        .benachrichtigung {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #327347;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s ease, top 0.5s ease;
+            z-index: 1000;
+        }
+
+        .benachrichtigung.anzeigen {
+            opacity: 1;
+            top: 40px;
         }
 
         .fusszeile {
@@ -161,6 +259,93 @@
                 }
             }
         }
+
+       // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
+       function toggleFavorit(event, button, produktId, produktInfo) {
+        event.stopPropagation(); // Navigation zur Produktseite verhindern
+        
+        // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+        let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+        const existingIndex = favoriten.findIndex(item => item.id === produktId);
+        let nachricht = "";
+
+        if (existingIndex > -1) {
+            // Entfernen aus den Favoriten
+            favoriten.splice(existingIndex, 1);
+            button.classList.remove("favorit");
+            nachricht = "Produkt wurde aus den Favoriten entfernt";
+        } else {
+            // Hinzufügen zu den Favoriten
+            favoriten.push({ id: produktId, ...produktInfo });
+            button.classList.add("favorit");
+            nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+        }
+        
+        // Favoriten aktualisiert in localStorage speichern
+        localStorage.setItem("favoriten", JSON.stringify(favoriten));
+        
+        // Benachrichtigung anzeigen
+        zeigeBenachrichtigung(nachricht);
+    }
+
+    function toggleEinkaufswagen(event, button, produktId, produktInfo) {
+    event.stopPropagation(); // Navigation zur Produktseite verhindern
+
+    // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+    let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+    const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
+    let nachricht = "";
+
+    if (existingIndex > -1) {
+        // Entfernen aus dem Einkaufswagen
+        einkaufswagen.splice(existingIndex, 1);
+        button.classList.remove("im-einkaufswagen");
+        nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
+    } else {
+        // Hinzufügen zum Einkaufswagen
+        einkaufswagen.push({ id: produktId, ...produktInfo });
+        button.classList.add("im-einkaufswagen");
+        nachricht = "Produkt wurde in den Einkaufswagen gelegt";
+    }
+
+    // Einkaufswagen aktualisiert in localStorage speichern
+    localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
+
+    // Benachrichtigung anzeigen
+    zeigeBenachrichtigung(nachricht);
+}
+
+        // Funktion zur Anzeige der Benachrichtigung
+        function zeigeBenachrichtigung(nachricht) {
+            const benachrichtigung = document.getElementById("benachrichtigung");
+            benachrichtigung.textContent = nachricht;
+            benachrichtigung.classList.add("anzeigen");
+
+            setTimeout(() => {
+                benachrichtigung.classList.remove("anzeigen");
+            }, 3000); // Benachrichtigung nach 3 Sekunden ausblenden
+        }
+
+        function initializeFavoritenUndEinkaufswagen() {
+    const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+    const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+
+    document.querySelectorAll(".favoriten-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (favoriten.some(item => item.id === produktId)) {
+            button.classList.add("favorit");
+        }
+    });
+
+    document.querySelectorAll(".einkaufswagen-button").forEach(button => {
+        const produktId = button.dataset.produktId;
+        if (einkaufswagen.some(item => item.id === produktId)) {
+            button.classList.add("im-einkaufswagen");
+        }
+    });
+}
+
+window.onload = initializeFavoritenUndEinkaufswagen;
     </script>
 </head>
 <body>
@@ -171,8 +356,8 @@
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
-            <span>❤️</span>
-            <span>🛒</span>
+            <span class="icon" onclick="location.href='Favoriten.html'">❤️</span>
+            <span class="icon" onclick="location.href='Einkaufswagen.html'">🛒</span>
             <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
     </header>
@@ -195,24 +380,103 @@
 
          <!-- Produktkarten-Bereich -->
          <main class="produktbereich">
-            <a href="Pullover.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/e7c68538b6df03af8bab41551c1114976292592d_WPABI_M23396_PAA_A.P.C._Mavericks_Pullover_Ecru_OS_1_4a476469-5181-460e-a17c-0eb2c95877ad_480x480.jpg?v=1725464494" alt="Pullover 1" />
+            <div class="produktkarte">
+                <a href="Pullover.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/e7c68538b6df03af8bab41551c1114976292592d_WPABI_M23396_PAA_A.P.C._Mavericks_Pullover_Ecru_OS_1_4a476469-5181-460e-a17c-0eb2c95877ad_480x480.jpg?v=1725464494"
+                        alt="Pullover 1" />
+                </a>
                 <div class="produkt-info">
                     <p class="produkt-titel">Mavericks Pullover</p>
                     <p class="produkt-preis">€89,99</p>
                     <p class="produkt-beschreibung">A.P.C. x Tame Impala Mavericks Pullover</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="mavericksPullover" onclick="toggleFavorit(event, this, 'mavericksPullover', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/e7c68538b6df03af8bab41551c1114976292592d_WPABI_M23396_PAA_A.P.C._Mavericks_Pullover_Ecru_OS_1_4a476469-5181-460e-a17c-0eb2c95877ad_480x480.jpg?v=1725464494', 
+                  titel: 'Mavericks Pullover', 
+                  preis: '€89,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="mavericksPullover" onclick="toggleEinkaufswagen(event, this, 'mavericksPullover', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/e7c68538b6df03af8bab41551c1114976292592d_WPABI_M23396_PAA_A.P.C._Mavericks_Pullover_Ecru_OS_1_4a476469-5181-460e-a17c-0eb2c95877ad_480x480.jpg?v=1725464494',
+                  titel: 'Mavericks Pullover',
+                  preis: '€89,99'
+              })">🛒</span>
+                    </div>
                 </div>
-            </a>
-            <a href="Pullover.html" class="produktkarte">
-                <img src="https://www.asphaltgold.com/cdn/shop/files/63fcbdfadd225a3b480c735103970a5e4a0711fc_SS24_K_1010_032c_Selfie_Sweater_Grey_Melange_os_1_480x480.jpg?v=1720520928" alt="Pullover 2">
+            </div>
+            <div class="produktkarte">
+                <a href="Pullover.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/63fcbdfadd225a3b480c735103970a5e4a0711fc_SS24_K_1010_032c_Selfie_Sweater_Grey_Melange_os_1_480x480.jpg?v=1720520928"
+                        alt="Pullover 2" />
+                </a>
                 <div class="produkt-info">
                     <p class="produkt-titel">Grey Melange Pullover</p>
                     <p class="produkt-preis">€79,99</p>
-                    <p class="produkt-beschreibung">032c 'Selfie' Sweater</p>
+                    <p class="produkt-beschreibung"> High Essential 032c 'Selfie' Sweater Grey</p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="greymelangePullover" onclick="toggleFavorit(event, this, 'greymelangePullover', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/63fcbdfadd225a3b480c735103970a5e4a0711fc_SS24_K_1010_032c_Selfie_Sweater_Grey_Melange_os_1_480x480.jpg?v=1720520928', 
+                  titel: 'Grey Melange Pullover', 
+                  preis: '€79,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="greymelangePullover" onclick="toggleEinkaufswagen(event, this, 'greymelangePullover', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/63fcbdfadd225a3b480c735103970a5e4a0711fc_SS24_K_1010_032c_Selfie_Sweater_Grey_Melange_os_1_480x480.jpg?v=1720520928',
+                  titel: 'Grey Melange Pullover',
+                  preis: '€79,99'
+              })">🛒</span>
+                    </div>
                 </div>
-            </a>
+            </div>
+            <div class="produktkarte">
+                <a href="Pullover.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/CTkCscMZlFTVyiYilKu1_WVBCH-H23234-A.P.C.-Harris-Pullover-Ecru-os-1_f2bde6db-bc31-4561-876a-a6c153eb524e_480x480.jpg?v=1726153400"
+                        alt="Pullover 3" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">A.P.C. Harris Pullover</p>
+                    <p class="produkt-preis">€49,99</p>
+                    <p class="produkt-beschreibung">Ecru A.P.C. Harris New Custom Pullover </p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="harrisPullover" onclick="toggleFavorit(event, this, 'harrisPullover', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/CTkCscMZlFTVyiYilKu1_WVBCH-H23234-A.P.C.-Harris-Pullover-Ecru-os-1_f2bde6db-bc31-4561-876a-a6c153eb524e_480x480.jpg?v=1726153400', 
+                  titel: 'A.P.C. Harris Pullover', 
+                  preis: '€39,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="harrisPullover" onclick="toggleEinkaufswagen(event, this, 'harrisPullover', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/CTkCscMZlFTVyiYilKu1_WVBCH-H23234-A.P.C.-Harris-Pullover-Ecru-os-1_f2bde6db-bc31-4561-876a-a6c153eb524e_480x480.jpg?v=1726153400',
+                  titel: 'A.P.C. Harris Pullover',
+                  preis: '€39,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
+            <div class="produktkarte">
+                <a href="Pullover.html">
+                    <img src="https://www.asphaltgold.com/cdn/shop/files/b4ca7a7b2b2acacadb7cb40abf948d1d88d28e5d_NF0A7ZJADYX_The_North_Face_Essential_Crewneck_Sweater_TNF_Light_Grey_Heather_OS_2_d01e5b6e-7acf-4efa-b495-318f410b0395_480x480.jpg?v=1716305005"
+                        alt="Pullover 4" />
+                </a>
+                <div class="produkt-info">
+                    <p class="produkt-titel">The North Face Pullover</p>
+                    <p class="produkt-preis">€99,99</p>
+                    <p class="produkt-beschreibung"> The North Face Crewneck A.P. Pullover
+                        </p>
+                    <div class="button-container">
+                        <span class="favoriten-button" data-produkt-id="northfacePullover" onclick="toggleFavorit(event, this, 'northfacePullover', { 
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/b4ca7a7b2b2acacadb7cb40abf948d1d88d28e5d_NF0A7ZJADYX_The_North_Face_Essential_Crewneck_Sweater_TNF_Light_Grey_Heather_OS_2_d01e5b6e-7acf-4efa-b495-318f410b0395_480x480.jpg?v=1716305005', 
+                  titel: 'The North Face Pullover', 
+                  preis: '€99,99'
+              })">❤️</span>
+                        <span class="einkaufswagen-button" data-produkt-id="northfacePullover" onclick="toggleEinkaufswagen(event, this, 'northfacePullover', {
+                  bild: 'https://www.asphaltgold.com/cdn/shop/files/b4ca7a7b2b2acacadb7cb40abf948d1d88d28e5d_NF0A7ZJADYX_The_North_Face_Essential_Crewneck_Sweater_TNF_Light_Grey_Heather_OS_2_d01e5b6e-7acf-4efa-b495-318f410b0395_480x480.jpg?v=1716305005',
+                  titel: 'The North Face Pullover',
+                  preis: '€99,99'
+              })">🛒</span>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
+    <!-- Benachrichtigung -->
+    <div id="benachrichtigung" class="benachrichtigung"></div>
 
     <!-- Fußzeile -->
     <footer class="fusszeile">
