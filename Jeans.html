@@ -331,20 +331,67 @@
         function handleSearch(event) {
             if (event.key === "Enter") {
                 const searchTerm = event.target.value.toLowerCase();
-                if (searchTerm.includes("skyhigh")) {
-                    window.location.href = "SkyhighHoodie.html";
-                } else if (searchTerm.includes("newyorkyankees")) {
-                    window.location.href = "NewyorkyankeesHoodie.html";
+                const produktkarten = document.querySelectorAll(".produktkarte");
+
+                // Prüfen, ob Suchbegriff leer ist
+                if (!searchTerm.trim()) {
+                    produktkarten.forEach(karte => {
+                        karte.style.display = "block"; // Alle anzeigen
+                    });
+                    return;
+                }
+
+                if (searchTerm.includes("dime")) {
+                    window.location.href = "Hoodie.html";
+                } else if (searchTerm.includes("asphaltgold")) {
+                    window.location.href = "Hoodie.html";
+                } else if (searchTerm.includes("ny yankees")) {
+                    window.location.href = "Hoodie.html";
+                } else if (searchTerm.includes("skyhigh")) {
+                    window.location.href = "Hoodie.html";
                 } else if (searchTerm.includes("hoodie")) {
                     window.location.href = "Hoodie.html";
+                } else if (searchTerm.includes("grey melange")) {
+                    window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("harris")) {
+                    window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("north face")) {
+                    window.location.href = "Pullover.html";
                 } else if (searchTerm.includes("pullover")) {
                     window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("maverick")) {
+                    window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("pullover")) {
+                    window.location.href = "Pullover.html";
+                } else if (searchTerm.includes("carhartt")) {
+                    window.location.href = "T-Shirt.html";
+                } else if (searchTerm.includes("scuffers")) {
+                    window.location.href = "T-Shirt.html";
+                } else if (searchTerm.includes("by parra")) {
+                    window.location.href = "T-Shirt.html";
+                } else if (searchTerm.includes("patta")) {
+                    window.location.href = "T-Shirt.html";
                 } else if (searchTerm.includes("t-shirt")) {
                     window.location.href = "T-Shirt.html";
-                } else if (searchTerm.includes("jeans")) {
-                    window.location.href = "Jeans.html";
-                } else {
-                    alert("Produkt nicht gefunden!");
+                }
+
+                // Produktkarten filtern
+                let found = false;
+                produktkarten.forEach(karte => {
+                    const titel = karte.querySelector(".produkt-titel").textContent.toLowerCase();
+                    const beschreibung = karte.querySelector(".produkt-beschreibung").textContent.toLowerCase();
+
+                    // Prüfen, ob der Suchbegriff im Titel oder in der Beschreibung vorkommt
+                    if (titel.includes(searchTerm) || beschreibung.includes(searchTerm)) {
+                        karte.style.display = "block"; // Anzeigen
+                        found = true;
+                    } else {
+                        karte.style.display = "none"; // Ausblenden
+                    }
+                });
+
+                if (!found) {
+                    alert("Kein passendes Produkt gefunden!");
                 }
             }
         }
