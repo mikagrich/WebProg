@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -236,12 +237,17 @@
         }
 
         .fusszeile {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
             background-color: #fff;
             border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .soziale-icons span,
@@ -251,7 +257,7 @@
         }
     </style>
     <script>
-         function handleSearch(event) {
+        function handleSearch(event) {
             if (event.key === "Enter") {
                 const searchTerm = event.target.value.toLowerCase();
                 if (searchTerm.includes("skyhigh")) {
@@ -272,57 +278,54 @@
             }
         }
 
-         // Funktion zum Laden und Anzeigen der Favoriten
+        // Funktion zum Laden und Anzeigen der Favoriten
         function ladeFavoriten() {
-            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-            const favoritenListe = document.getElementById("favoritenListe");
+            const favoritenContainer = document.querySelector('.favoriten-liste');
+            const favoriten = JSON.parse(localStorage.getItem('favoriten') || '[]');
 
             // Überprüfen, ob Favoriten vorhanden sind
             if (favoriten.length === 0) {
-                favoritenListe.innerHTML = "<p>Keine Favoriten vorhanden</p>";
+                favoritenContainer.innerHTML = "<p>Keine Favoriten vorhanden</p>";
                 return;
             }
 
-            favoritenListe.innerHTML = ""; // Falls bereits Daten vorhanden sind, leeren
-
-            // Jede Favoritenkarte erstellen
-            favoriten.forEach(produkt => {
-                const produktkarte = document.createElement("div");
-                produktkarte.classList.add("produktkarte");
-
-                produktkarte.innerHTML = `
-                    <img src="${produkt.bild}" alt="${produkt.titel}" />
-                    <p class="produkt-titel">${produkt.titel}</p>
-                    <p class="produkt-preis">${produkt.preis}</p>
-                    <button onclick="entferneFavorit('${produkt.id}')">Favorit entfernen</button>
-                `;
-
-                favoritenListe.appendChild(produktkarte);
+            favoriten.forEach(favorit => {
+                const favoritItem = document.createElement('div');
+                favoritItem.classList.add('favorit-item');
+                favoritItem.innerHTML = `
+            <img src="${favorit.bild}" alt="${favorit.titel}" style="width: 80px; height: auto; border-radius: 5px; margin-right: 10px;">
+            <div>
+                <p class="produkt-titel">${favorit.titel}</p>
+                <p class="produkt-preis">${favorit.preis}</p>
+            </div>
+            <button onclick="entferneFavorit('${favorit.id}')">Entfernen</button>
+        `;
+                favoritenContainer.appendChild(favoritItem);
             });
         }
 
-        // Funktion zum Entfernen eines Produkts aus den Favoriten
         function entferneFavorit(produktId) {
-            let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-            favoriten = favoriten.filter(produkt => produkt.id !== produktId);
-            localStorage.setItem("favoriten", JSON.stringify(favoriten));
-            ladeFavoriten(); // Liste neu laden
+            let favoriten = JSON.parse(localStorage.getItem('favoriten') || '[]');
+            favoriten = favoriten.filter(item => item.id !== produktId);
+            localStorage.setItem('favoriten', JSON.stringify(favoriten));
+            ladeFavoriten(); // Favoritenliste neu laden
         }
 
-        // Favoriten laden, wenn die Seite geöffnet wird
         window.onload = ladeFavoriten;
     </script>
 </head>
+
 <body>
-  <!-- Navigationsleiste -->
-  <header class="navigationsleiste">
-    <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
+    <!-- Navigationsleiste -->
+    <header class="navigationsleiste">
+        <a href="Startseite.html" class="logo"><img
+                src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
         <div class="suchleiste">
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
         <div class="icons">
-            <span onclick="location.href='Favoriten.html'">❤️</span>
-            <span>🛒</span>
+            <span class="icon" onclick="location.href='Favoriten.html'">❤️</span>
+            <span class="icon" onclick="location.href='Einkaufswagen.html'">🛒</span>
             <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
         </div>
     </header>
@@ -337,19 +340,22 @@
         </nav>
 
         <main>
-            <div class="produktbereich" id="favoritenListe"></div>
+            <ul class="favoriten-liste"></ul>
         </main>
 
-     <!-- Fußzeile -->
-     <footer class="fusszeile">
-        <div class="soziale-icons">
-            <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
-            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa" target="_blank">🐦</a>
-            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e" target="_blank">📘</a>
-        </div>
-        <div class="hilfe-icon">
-            <span>❓</span>
-        </div>
-    </footer>
+        <!-- Fußzeile -->
+        <footer class="fusszeile">
+            <div class="soziale-icons">
+                <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
+                <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa"
+                    target="_blank">🐦</a>
+                <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e"
+                    target="_blank">📘</a>
+            </div>
+            <div class="hilfe-icon">
+                <span>❓</span>
+            </div>
+        </footer>
 </body>
+
 </html>
