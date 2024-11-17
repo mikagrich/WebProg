@@ -33,7 +33,6 @@
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
-            /* Erlaubt die Zentrierung von Elementen innerhalb */
         }
 
         .logo img {
@@ -43,13 +42,9 @@
 
         .suchleiste {
             position: absolute;
-            /* Absolute Positionierung relativ zum Header */
             left: 50%;
-            /* Horizontal mittig im Header */
             transform: translateX(-50%);
-            /* Exakte Zentrierung */
             width: 300px;
-            /* Standardbreite */
         }
 
         .suchleiste input {
@@ -65,7 +60,6 @@
             display: flex;
             justify-content: flex-end;
             gap: 10px;
-            /* Abstand zwischen Icons */
         }
 
         .icons span {
@@ -82,7 +76,6 @@
             border-top: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
             flex-wrap: wrap;
-            /* Zeilenumbruch ermöglichen */
             gap: 10px;
         }
 
@@ -129,89 +122,65 @@
         @media (max-width: 480px) {
             .navigationsleiste {
                 flex-direction: column;
-                /* Stapelt Logo, Suchleiste und Icons vertikal */
                 align-items: center;
-                /* Zentriert die Elemente */
                 text-align: center;
             }
 
             .logo {
                 margin-bottom: 10px;
-                /* Abstand zwischen den Elementen */
             }
 
             .suchleiste {
                 position: static;
-                /* Hebt die absolute Positionierung auf */
                 transform: none;
-                /* Entfernt die Zentrierung durch Transform */
                 width: 80%;
-                /* Breite anpassen */
                 margin-bottom: 10px;
-                /* Abstand zwischen den Elementen */
             }
 
             .icons {
                 margin-bottom: 10px;
-                /* Abstand zwischen den Elementen */
             }
 
             .linkleiste {
                 flex-direction: row;
-                /* Elemente bleiben nebeneinander */
                 justify-content: center;
-                /* Zentriert die Links horizontal */
                 flex-wrap: wrap;
-                /* Links umbrechen, falls nötig */
                 gap: 10px;
-                /* Abstand zwischen Links */
             }
 
             .linkleiste a {
                 margin: 0;
-                /* Kein zusätzlicher Abstand erforderlich */
             }
         }
 
-        /* Grid-Layout für Produktbereich */
         .produktbereich {
             display: grid;
             gap: 20px;
             padding: 20px;
             justify-items: center;
-            /* Zentriert die Karten */
         }
 
-        /* Standardgröße: Eine Spalte für kleinere Bildschirme */
         .produktbereich {
             grid-template-columns: 1fr;
-            /* Eine Spalte bei kleinen Bildschirmen */
         }
 
-        /* Für größere Bildschirme: Zwei Spalten mit freiem Platz an den Rändern */
         @media (min-width: 768px) {
             .produktbereich {
                 grid-template-columns: repeat(4, 1fr);
-                /* Zwei Spalten */
                 max-width: 1200px;
-                /* Maximale Breite des Containers */
                 margin: 0 auto;
-                /* Zentriert den Container */
             }
         }
 
-        /* Responsive Design für größere Bildschirme */
         @media (min-width: 1024px) {
             .produktbereich {
                 grid-template-columns: repeat(4, 1fr);
-                /* Zwei Spalten bleiben */
             }
         }
 
         @media (min-height: 1024px) {
             .produktbereich {
                 grid-template-columns: repeat(2, 1fr);
-                /* Zwei Spalten bleiben */
             }
         }
 
@@ -270,7 +239,6 @@
             color: #aaa;
         }
 
-        /* Button-Container immer unten */
         .button-container {
             display: flex;
             justify-content: space-between;
@@ -325,7 +293,6 @@
             gap: 10px;
         }
 
-        /* Styling für die Radio-Buttons */
         .groessenwahl input[type="radio"] {
             display: none;
         }
@@ -356,7 +323,6 @@
             width: 100%;
         }
 
-        /* Benachrichtigungsanzeige */
         .benachrichtigung {
             position: fixed;
             top: 20px;
