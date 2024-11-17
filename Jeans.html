@@ -31,6 +31,8 @@
             padding: 10px 20px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            /* Erlaubt die Zentrierung von Elementen innerhalb */
         }
 
         .logo img {
@@ -40,18 +42,29 @@
 
         .suchleiste {
             position: absolute;
+            /* Absolute Positionierung relativ zum Header */
             left: 50%;
+            /* Horizontal mittig im Header */
             transform: translateX(-50%);
+            /* Exakte Zentrierung */
             width: 300px;
+            /* Standardbreite */
         }
 
         .suchleiste input {
             padding: 10px;
             border-radius: 20px;
             border: 3px solid #327347;
-            width: 300px;
+            width: 100%;
             outline: none;
             text-align: center;
+        }
+
+        .icons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            /* Abstand zwischen Icons */
         }
 
         .icons span {
@@ -67,6 +80,9 @@
             background-color: #204f2e;
             border-top: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+            /* Zeilenumbruch ermöglichen */
+            gap: 10px;
         }
 
         .linkleiste a {
@@ -82,6 +98,78 @@
 
         .linkleiste a:hover {
             background-color: #9a9797;
+        }
+
+        @media (max-width: 768px) {
+            .navigationsleiste {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .suchleiste {
+                width: 80%;
+            }
+
+            .icons {
+                justify-content: center;
+            }
+
+            .linkleiste {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .linkleiste a {
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navigationsleiste {
+                flex-direction: column;
+                /* Stapelt Logo, Suchleiste und Icons vertikal */
+                align-items: center;
+                /* Zentriert die Elemente */
+                text-align: center;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+                /* Abstand zwischen den Elementen */
+            }
+
+            .suchleiste {
+                position: static;
+                /* Hebt die absolute Positionierung auf */
+                transform: none;
+                /* Entfernt die Zentrierung durch Transform */
+                width: 80%;
+                /* Breite anpassen */
+                margin-bottom: 10px;
+                /* Abstand zwischen den Elementen */
+            }
+
+            .icons {
+                margin-bottom: 10px;
+                /* Abstand zwischen den Elementen */
+            }
+
+            .linkleiste {
+                flex-direction: row;
+                /* Elemente bleiben nebeneinander */
+                justify-content: center;
+                /* Zentriert die Links horizontal */
+                flex-wrap: wrap;
+                /* Links umbrechen, falls nötig */
+                gap: 10px;
+                /* Abstand zwischen Links */
+            }
+
+            .linkleiste a {
+                margin: 0;
+                /* Kein zusätzlicher Abstand erforderlich */
+            }
         }
 
         /* Grid-Layout für Produktbereich */
