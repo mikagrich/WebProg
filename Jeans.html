@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -228,7 +229,7 @@
             color: #333;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .produktkarte:hover {
@@ -291,6 +292,70 @@
             color: #327347;
         }
 
+        .produkt {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .produkt img {
+            width: 70%;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 3px solid #ccc;
+            margin: 20px 0;
+        }
+
+        .groessenwahl {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Styling für die Radio-Buttons */
+        .groessenwahl input[type="radio"] {
+            display: none;
+        }
+
+        .groessenwahl label {
+            display: inline-block;
+            background-color: #e0e0e0;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .groessenwahl label:hover {
+            background-color: #b1b0b0;
+        }
+
+        .groessenwahl input[type="radio"]:checked+label {
+            background-color: #327347;
+            color: white;
+        }
+
+        .beschreibung,
+        .kontakt {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
         /* Benachrichtigungsanzeige */
         .benachrichtigung {
             position: fixed;
@@ -313,12 +378,17 @@
         }
 
         .fusszeile {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
             background-color: #fff;
             border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .soziale-icons span,
@@ -396,60 +466,60 @@
             }
         }
 
-       // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
-       function toggleFavorit(event, button, produktId, produktInfo) {
-        event.stopPropagation(); // Navigation zur Produktseite verhindern
-        
-        // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
-        let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-        const existingIndex = favoriten.findIndex(item => item.id === produktId);
-        let nachricht = "";
+        // Funktion zur Steuerung der Favoriten und Anzeige der Benachrichtigung
+        function toggleFavorit(event, button, produktId, produktInfo) {
+            event.stopPropagation(); // Navigation zur Produktseite verhindern
 
-        if (existingIndex > -1) {
-            // Entfernen aus den Favoriten
-            favoriten.splice(existingIndex, 1);
-            button.classList.remove("favorit");
-            nachricht = "Produkt wurde aus den Favoriten entfernt";
-        } else {
-            // Hinzufügen zu den Favoriten
-            favoriten.push({ id: produktId, ...produktInfo });
-            button.classList.add("favorit");
-            nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+            // Favoriten-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+            let favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            const existingIndex = favoriten.findIndex(item => item.id === produktId);
+            let nachricht = "";
+
+            if (existingIndex > -1) {
+                // Entfernen aus den Favoriten
+                favoriten.splice(existingIndex, 1);
+                button.classList.remove("favorit");
+                nachricht = "Produkt wurde aus den Favoriten entfernt";
+            } else {
+                // Hinzufügen zu den Favoriten
+                favoriten.push({ id: produktId, ...produktInfo });
+                button.classList.add("favorit");
+                nachricht = "Produkt wurde zu den Favoriten hinzugefügt";
+            }
+
+            // Favoriten aktualisiert in localStorage speichern
+            localStorage.setItem("favoriten", JSON.stringify(favoriten));
+
+            // Benachrichtigung anzeigen
+            zeigeBenachrichtigung(nachricht);
         }
-        
-        // Favoriten aktualisiert in localStorage speichern
-        localStorage.setItem("favoriten", JSON.stringify(favoriten));
-        
-        // Benachrichtigung anzeigen
-        zeigeBenachrichtigung(nachricht);
-    }
 
-    function toggleEinkaufswagen(event, button, produktId, produktInfo) {
-    event.stopPropagation(); // Navigation zur Produktseite verhindern
+        function toggleEinkaufswagen(event, button, produktId, produktInfo) {
+            event.stopPropagation(); // Navigation zur Produktseite verhindern
 
-    // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
-    let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
-    const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
-    let nachricht = "";
+            // Einkaufswagen-Liste aus localStorage laden (oder eine leere Liste, falls nicht vorhanden)
+            let einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+            const existingIndex = einkaufswagen.findIndex(item => item.id === produktId);
+            let nachricht = "";
 
-    if (existingIndex > -1) {
-        // Entfernen aus dem Einkaufswagen
-        einkaufswagen.splice(existingIndex, 1);
-        button.classList.remove("im-einkaufswagen");
-        nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
-    } else {
-        // Hinzufügen zum Einkaufswagen
-        einkaufswagen.push({ id: produktId, ...produktInfo });
-        button.classList.add("im-einkaufswagen");
-        nachricht = "Produkt wurde in den Einkaufswagen gelegt";
-    }
+            if (existingIndex > -1) {
+                // Entfernen aus dem Einkaufswagen
+                einkaufswagen.splice(existingIndex, 1);
+                button.classList.remove("im-einkaufswagen");
+                nachricht = "Produkt wurde aus dem Einkaufswagen entfernt";
+            } else {
+                // Hinzufügen zum Einkaufswagen
+                einkaufswagen.push({ id: produktId, ...produktInfo });
+                button.classList.add("im-einkaufswagen");
+                nachricht = "Produkt wurde in den Einkaufswagen gelegt";
+            }
 
-    // Einkaufswagen aktualisiert in localStorage speichern
-    localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
+            // Einkaufswagen aktualisiert in localStorage speichern
+            localStorage.setItem("einkaufswagen", JSON.stringify(einkaufswagen));
 
-    // Benachrichtigung anzeigen
-    zeigeBenachrichtigung(nachricht);
-}
+            // Benachrichtigung anzeigen
+            zeigeBenachrichtigung(nachricht);
+        }
 
         // Funktion zur Anzeige der Benachrichtigung
         function zeigeBenachrichtigung(nachricht) {
@@ -463,31 +533,33 @@
         }
 
         function initializeFavoritenUndEinkaufswagen() {
-    const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
-    const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
+            const favoriten = JSON.parse(localStorage.getItem("favoriten") || "[]");
+            const einkaufswagen = JSON.parse(localStorage.getItem("einkaufswagen") || "[]");
 
-    document.querySelectorAll(".favoriten-button").forEach(button => {
-        const produktId = button.dataset.produktId;
-        if (favoriten.some(item => item.id === produktId)) {
-            button.classList.add("favorit");
+            document.querySelectorAll(".favoriten-button").forEach(button => {
+                const produktId = button.dataset.produktId;
+                if (favoriten.some(item => item.id === produktId)) {
+                    button.classList.add("favorit");
+                }
+            });
+
+            document.querySelectorAll(".einkaufswagen-button").forEach(button => {
+                const produktId = button.dataset.produktId;
+                if (einkaufswagen.some(item => item.id === produktId)) {
+                    button.classList.add("im-einkaufswagen");
+                }
+            });
         }
-    });
 
-    document.querySelectorAll(".einkaufswagen-button").forEach(button => {
-        const produktId = button.dataset.produktId;
-        if (einkaufswagen.some(item => item.id === produktId)) {
-            button.classList.add("im-einkaufswagen");
-        }
-    });
-}
-
-window.onload = initializeFavoritenUndEinkaufswagen;
+        window.onload = initializeFavoritenUndEinkaufswagen;
     </script>
 </head>
+
 <body>
     <!-- Navigationsleiste -->
     <header class="navigationsleiste">
-        <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
+        <a href="Startseite.html" class="logo"><img
+                src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
         <div class="suchleiste">
             <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
         </div>
@@ -508,24 +580,24 @@ window.onload = initializeFavoritenUndEinkaufswagen;
         </nav>
 
         <!-- Inhalt spezifisch für diese Seite -->
-        <main style="padding: 20px;">
-            <h1>Willkommen bei unserem Jeans-Sortiment</h1>
-            <p>Das sind unsere Bestseller im Jeans-Bereich.</p>
-            <p>Viel Spaß beim shoppen!</p>
-        </main>
+        <div class="Text" id="willkommensgruss">
+            <main style="padding: 20px;">
+                <h1>Willkommen bei unserem Jeans-Sortiment</h1>
+                <p>Das sind unsere Bestseller im Jeans-Bereich.</p>
+                <p>Viel Spaß beim shoppen!</p>
+            </main>
+        </div>
 
-         <!-- Produktkarten-Bereich -->
-         <main class="produktbereich">
-            <div class="produktkarte">
-                <a href="Jeans.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626"
-                        alt="Jeans 1" />
-                </a>
+        <!-- Produktkarten-Bereich -->
+        <main class="produktbereich">
+            <div class="produktkarte" onclick="produktAnzeigen(buttergoodsJeans)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626"
+                    alt="Jeans 1" />
                 <div class="produkt-info">
                     <p class="produkt-titel">Butter Goods Jeans</p>
                     <p class="produkt-preis">€89,99</p>
                     <p class="produkt-beschreibung">Butter Goods Patch Pocket Denim Jeans Washed Indigo
-                        </p>
+                    </p>
                     <div class="button-container">
                         <span class="favoriten-button" data-produkt-id="buttergoodsJeans" onclick="toggleFavorit(event, this, 'buttergoodsJeans', { 
                   bild: 'https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626', 
@@ -540,11 +612,9 @@ window.onload = initializeFavoritenUndEinkaufswagen;
                     </div>
                 </div>
             </div>
-            <div class="produktkarte">
-                <a href="Jeans.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
-                        alt="Jeans 2" />
-                </a>
+            <div class="produktkarte" onclick="produktAnzeigen(levisJeans)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
+                    alt="Jeans 2" />
                 <div class="produkt-info">
                     <p class="produkt-titel">Levi´s Skate Jeans</p>
                     <p class="produkt-preis">€99,99</p>
@@ -563,11 +633,9 @@ window.onload = initializeFavoritenUndEinkaufswagen;
                     </div>
                 </div>
             </div>
-            <div class="produktkarte">
-                <a href="Jeans.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/c3f1224ddad761b21e0a979feb0fef483c926ba5_2411012_Daily_Paper_Settle_Macrame_Denim_Pants_Light_Blue_os_1_f2b37a0b-b852-4310-9f1f-7acdd4f8c2f4_480x480.jpg?v=1730900343"
-                        alt="Jeans 3" />
-                </a>
+            <div class="produktkarte" onclick="produktAnzeigen(dailypaperJeans)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/c3f1224ddad761b21e0a979feb0fef483c926ba5_2411012_Daily_Paper_Settle_Macrame_Denim_Pants_Light_Blue_os_1_f2b37a0b-b852-4310-9f1f-7acdd4f8c2f4_480x480.jpg?v=1730900343"
+                    alt="Jeans 3" />
                 <div class="produkt-info">
                     <p class="produkt-titel">Daily Paper Jeans</p>
                     <p class="produkt-preis">€69,99</p>
@@ -586,15 +654,13 @@ window.onload = initializeFavoritenUndEinkaufswagen;
                     </div>
                 </div>
             </div>
-            <div class="produktkarte">
-                <a href="Jeans.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/o3usPrF9dMvEuN1BNQiw_POC-AW24-4200-337-0001-140-Patta-Leaves-Laser-Printed-Denim-Jeans-Blue-Denim-os-1_116eb9cd-f915-4315-bc04-c08e36c97bc8_480x480.jpg?v=1726153871"
-                        alt="Jeans 4" />
-                </a>
+            <div class="produktkarte" onclick="produktAnzeigen(kaniJeans)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/o3usPrF9dMvEuN1BNQiw_POC-AW24-4200-337-0001-140-Patta-Leaves-Laser-Printed-Denim-Jeans-Blue-Denim-os-1_116eb9cd-f915-4315-bc04-c08e36c97bc8_480x480.jpg?v=1726153871"
+                    alt="Jeans 4" />
                 <div class="produkt-info">
-                    <p class="produkt-titel">Patta Leaves Jeans</p>
+                    <p class="produkt-titel">Kani Leaves Jeans</p>
                     <p class="produkt-preis">€89,99</p>
-                    <p class="produkt-beschreibung">Patta Leaves Laser Printed new Denim Jeans</p>
+                    <p class="produkt-beschreibung">Kani Leaves Laser Printed new Denim Jeans</p>
                     <div class="button-container">
                         <span class="favoriten-button" data-produkt-id="pattaJeans" onclick="toggleFavorit(event, this, 'pattaJeans', { 
                   bild: 'https://www.asphaltgold.com/cdn/shop/files/o3usPrF9dMvEuN1BNQiw_POC-AW24-4200-337-0001-140-Patta-Leaves-Laser-Printed-Denim-Jeans-Blue-Denim-os-1_116eb9cd-f915-4315-bc04-c08e36c97bc8_480x480.jpg?v=1726153871', 
@@ -610,6 +676,146 @@ window.onload = initializeFavoritenUndEinkaufswagen;
                 </div>
             </div>
         </main>
+        <div class="produkt" id="buttergoodsJeans">
+            <h2>Butter Goods Jeans</h2>
+            <p>Preis: €89,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/ha7zdNSdmb4EmtAK88wn_buttergoods395-Butter-Goods-Patch-Pocket-Denim-Jeans-Washed-Indigo-os-1_97e25e40-8f81-443b-b5f7-ae45d5d61d4a_480x480.jpg?v=1726153626"
+                alt="Jeans 1" />
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Butter Goods Patch Pocket</li>
+                    <li>Indigo Blue</li>
+                    <li>Denim Jeans Washed</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
+        <div class="produkt" id="levisJeans">
+            <h2>Levi´s Skate Jeans</h2>
+            <p>Preis: €99,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
+                alt="Jeans 2">
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Levi's Skate Baggy Jeans</li>
+                    <li>5 Pockets</li>
+                    <li>Deep Grove Blue</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
+        <div class="produkt" id="dailypaperJeans">
+            <h2>Daily Paper Jeans</h2>
+            <p>Preis: €69,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/c3f1224ddad761b21e0a979feb0fef483c926ba5_2411012_Daily_Paper_Settle_Macrame_Denim_Pants_Light_Blue_os_1_f2b37a0b-b852-4310-9f1f-7acdd4f8c2f4_480x480.jpg?v=1730900343"
+                alt="Jeans 3">
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Daily Paper Settle Macrame</li>
+                    <li>Denim Pants Blue</li>
+                    <li>Gerippter Saum und Bündchen</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
+        <div class="produkt" id="kaniJeans">
+            <h2>Kani Leaves Jeans</h2>
+            <p>Preis: €89,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/o3usPrF9dMvEuN1BNQiw_POC-AW24-4200-337-0001-140-Patta-Leaves-Laser-Printed-Denim-Jeans-Blue-Denim-os-1_116eb9cd-f915-4315-bc04-c08e36c97bc8_480x480.jpg?v=1726153871"
+                alt="Jeans 4">
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Kani Leaves Jeans</li>
+                    <li>Laser Printed new Denim</li>
+                    <li>100% Baumwolle</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
     </div>
     <!-- Benachrichtigung -->
     <div id="benachrichtigung" class="benachrichtigung"></div>
@@ -618,12 +824,47 @@ window.onload = initializeFavoritenUndEinkaufswagen;
     <footer class="fusszeile">
         <div class="soziale-icons">
             <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
-            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa" target="_blank">🐦</a>
-            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e" target="_blank">📘</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa"
+                target="_blank">🐦</a>
+            <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e"
+                target="_blank">📘</a>
         </div>
         <div class="hilfe-icon">
             <span>❓</span>
         </div>
     </footer>
+    <script>
+        function produktAnzeigen(produkt) {
+            let produktkarten = document.getElementsByClassName("produktkarte");
+            for (let i = 0; i < produktkarten.length; i++) {
+                produktkarten[i].style.display = "none";
+            }
+            if (produkt === buttergoodsJeans) {
+                document.getElementById("buttergoodsJeans").style.display = "flex";
+                document.getElementById("levisJeans").style.display = "none";
+                document.getElementById("dailypaperJeans").style.display = "none";
+                document.getElementById("kaniJeans").style.display = "none";
+            }
+            if (produkt === levisJeans) {
+                document.getElementById("buttergoodsJeans").style.display = "none";
+                document.getElementById("levisJeans").style.display = "flex";
+                document.getElementById("dailypaperJeans").style.display = "none";
+                document.getElementById("kaniJeans").style.display = "none";
+            }
+            if (produkt === dailypaperJeans) {
+                document.getElementById("buttergoodsJeans").style.display = "none";
+                document.getElementById("levisJeans").style.display = "none";
+                document.getElementById("dailypaperJeans").style.display = "flex";
+                document.getElementById("kaniJeans").style.display = "none";
+            }
+            if (produkt === kaniJeans) {
+                document.getElementById("buttergoodsJeans").style.display = "none";
+                document.getElementById("levisJeans").style.display = "none";
+                document.getElementById("dailypaperJeans").style.display = "none";
+                document.getElementById("kaniJeans").style.display = "flex";
+            }
+        }
+    </script>
 </body>
+
 </html>

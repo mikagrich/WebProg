@@ -229,6 +229,7 @@
             color: #333;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .produktkarte:hover {
@@ -291,6 +292,70 @@
             color: #327347;
         }
 
+        .produkt {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .produkt img {
+            width: 70%;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 3px solid #ccc;
+            margin: 20px 0;
+        }
+
+        .groessenwahl {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Styling für die Radio-Buttons */
+        .groessenwahl input[type="radio"] {
+            display: none;
+        }
+
+        .groessenwahl label {
+            display: inline-block;
+            background-color: #e0e0e0;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .groessenwahl label:hover {
+            background-color: #b1b0b0;
+        }
+
+        .groessenwahl input[type="radio"]:checked+label {
+            background-color: #327347;
+            color: white;
+        }
+
+        .beschreibung,
+        .kontakt {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
         /* Benachrichtigungsanzeige */
         .benachrichtigung {
             position: fixed;
@@ -313,12 +378,17 @@
         }
 
         .fusszeile {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
             background-color: #fff;
             border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .soziale-icons span,
@@ -513,11 +583,9 @@
 
         <!-- Produktkarten-Bereich -->
         <main class="produktbereich">
-            <div class="produktkarte">
-                <a href="SkyhighHoodie.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757"
-                        alt="Hoodie 1" />
-                </a>
+            <div class="produktkarte" onclick="produktAnzeigen(skyhighHoodie)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757"
+                    alt="Hoodie 1" />
                 <div class="produkt-info">
                     <p class="produkt-titel">Skyhigh Hoodie</p>
                     <p class="produkt-preis">€69,99</p>
@@ -536,34 +604,30 @@
                     </div>
                 </div>
             </div>
-            <div class="produktkarte">
-                <a href="T-Shirt.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605"
-                        alt="T-Shirt 2" />
-                </a>
+            <div class="produktkarte" onclick="produktAnzeigen(scuffersTshirt)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605"
+                    alt="T-Shirt 2" />
                 <div class="produkt-info">
-                    <p class="produkt-titel">Asphaltgold T-Shirt</p>
+                    <p class="produkt-titel">Scuffers T-Shirt</p>
                     <p class="produkt-preis">€29,99</p>
-                    <p class="produkt-beschreibung">Asphaltgold Third Place T-Shirt Botanical Garden</p>
+                    <p class="produkt-beschreibung">Scuffers Third Place T-Shirt Botanical Garden</p>
                     <div class="button-container">
-                        <span class="favoriten-button" data-produkt-id="asphaltgoldTshirt" onclick="toggleFavorit(event, this, 'asphaltgoldTshirt', { 
+                        <span class="favoriten-button" data-produkt-id="scuffersTshirt" onclick="toggleFavorit(event, this, 'scuffersTshirt', { 
                   bild: 'https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605', 
-                  titel: 'Asphaltgold T-Shirt', 
+                  titel: 'Scuffers T-Shirt', 
                   preis: '€29,99'
               })">❤️</span>
-                        <span class="einkaufswagen-button" data-produkt-id="asphaltgoldTshirt" onclick="toggleEinkaufswagen(event, this, 'asphaltgoldTshirt', {
+                        <span class="einkaufswagen-button" data-produkt-id="scuffersTshirt" onclick="toggleEinkaufswagen(event, this, 'scuffersTshirt', {
                   bild: 'https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605',
-                  titel: 'Asphaltgold T-Shirt',
+                  titel: 'Scuffers T-Shirt',
                   preis: '€29,99'
               })">🛒</span>
                     </div>
                 </div>
             </div>
-            <div class="produktkarte">
-                <a href="Jeans.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
-                        alt="Jeans 2" />
-                </a>
+            <div class="produktkarte" onclick="produktAnzeigen(levisJeans)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
+                    alt="Jeans 2" />
                 <div class="produkt-info">
                     <p class="produkt-titel">Levi´s Skate Jeans</p>
                     <p class="produkt-preis">€99,99</p>
@@ -582,11 +646,9 @@
                     </div>
                 </div>
             </div>
-            <div class="produktkarte">
-                <a href="NewyorkyankeesHoodie.html">
-                    <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445"
-                        alt="Hoodie 2">
-                </a>
+            <div class="produktkarte" onclick="produktAnzeigen(nyYankeesHoodie)">
+                <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445"
+                    alt="Hoodie 2">
                 <div class="produkt-info">
                     <p class="produkt-titel">NY Yankees Hoodie</p>
                     <p class="produkt-preis">€59,99</p>
@@ -606,6 +668,146 @@
                 </div>
             </div>
         </main>
+        <div class="produkt" id="skyhighHoodie">
+            <h2>Skyhigh Hoodie</h2>
+            <p>Preis: €69,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/HUXOAahgJejn9iKOPGky_SHF06T023-Sky-High-Farm-Universe-Sky-High-Syracuse-Hoodie-Navy-OS-1_480x480.jpg?v=1728571757"
+                alt="Hoodie 1" />
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Hoodie mit Tunnelzug</li>
+                    <li>Gerippte Bündchen und Saum</li>
+                    <li>100% Bio-Baumwolle</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
+        <div class="produkt" id="scuffersTshirt">
+            <h2>Scuffers Tshirt</h2>
+            <p>Preis: €29,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/9708e7b671081f06f3beaf237ad41e52c4a22146_ag0774_Asphaltgold_Third_Place_T_Shirt_Botanical_Garden_OS_1_f9573d15-3653-4006-b861-f06530f6f1ca_480x480.jpg?v=1730716605"
+                alt="T-Shirt 1" />
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Scuffers Third Place T-Shirt</li>
+                    <li>Botanical Garden Green</li>
+                    <li>100% Bio-Baumwolle</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
+        <div class="produkt" id="levisJeans">
+            <h2>Levis´s Skate Jeans</h2>
+            <p>Preis: €69,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/n2PUEq1wZwGrIfdb24qC_A23160000-Levis-Skate-Baggy-5-Pocket-Jeans-Deep-Grove-os-1_480x480.jpg?v=1726154750"
+                alt="Jeans 1" />
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Levis´s Baggy Jeans</li>
+                    <li>5 Pockets</li>
+                    <li>Deep Grove Blue</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
+        <div class="produkt" id="nyYankeesHoodie">
+            <h2>New York Yankees Hoodie</h2>
+            <p>Preis: €59,99</p>
+
+            <img src="https://www.asphaltgold.com/cdn/shop/files/rRw42YuPcpAnuy5C6VdQ_ST067505631GY03-Sporty-_26-Rich-Yankees-Serif-Zip-Hoodie-Heather-Gray-OS-1_480x480.jpg?v=1728571445"
+                alt="Hoodie 2">
+
+            <div class="groessenwahl">
+                <input type="radio" id="size-s" name="size" value="S">
+                <label for="size-s">S</label>
+
+                <input type="radio" id="size-m" name="size" value="M">
+                <label for="size-m">M</label>
+
+                <input type="radio" id="size-l" name="size" value="L">
+                <label for="size-l">L</label>
+
+                <input type="radio" id="size-xl" name="size" value="XL">
+                <label for="size-xl">XL</label>
+
+                <input type="radio" id="size-xxl" name="size" value="XXL">
+                <label for="size-xxl">XXL</label>
+            </div>
+            <div class="beschreibung">
+                <p>Beschreibung:</p>
+                <ul>
+                    <li>Durchgehender Reißverschluss</li>
+                    <li>Gerippter Saum und Bündchen</li>
+                    <li>100% Baumwolle</li>
+                </ul>
+            </div>
+            <div class="kontakt">
+                <p>Kontakt: support@shop.com</p>
+            </div>
+        </div>
     </div>
 
     <!-- Benachrichtigung -->
@@ -624,6 +826,38 @@
             <span>❓</span>
         </div>
     </footer>
+    <script>
+        function produktAnzeigen(produkt) {
+            let produktkarten = document.getElementsByClassName("produktkarte");
+            for (let i = 0; i < produktkarten.length; i++) {
+                produktkarten[i].style.display = "none";
+            }
+            if (produkt === skyhighHoodie) {
+                document.getElementById("skyhighHoodie").style.display = "flex";
+                document.getElementById("scuffersTshirt").style.display = "none";
+                document.getElementById("levisJeans").style.display = "none";
+                document.getElementById("nyYankeesHoodie").style.display = "none";
+            }
+            if (produkt === scuffersTshirt) {
+                document.getElementById("scuffersTshirt").style.display = "flex";
+                document.getElementById("skyhighHoodie").style.display = "none";
+                document.getElementById("levisJeans").style.display = "none";
+                document.getElementById("nyYankeesHoodie").style.display = "none";
+            }
+            if (produkt === levisJeans) {
+                document.getElementById("skyhighHoodie").style.display = "none";
+                document.getElementById("levisJeans").style.display = "flex";
+                document.getElementById("scuffersTshirt").style.display = "none";
+                document.getElementById("nyYankeesHoodie").style.display = "none";
+            }
+            if (produkt === nyYankeesHoodie) {
+                document.getElementById("skyhighHoodie").style.display = "none";
+                document.getElementById("levisJeans").style.display = "none";
+                document.getElementById("scuffersTshirt").style.display = "none";
+                document.getElementById("nyYankeesHoodie").style.display = "flex";
+            }
+        }
+    </script>
 </body>
 
 </html>

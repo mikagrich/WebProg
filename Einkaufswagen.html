@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Einkaufswagen</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f8;
@@ -14,6 +21,10 @@
             min-height: 100vh;
         }
 
+        .inhalt {
+            flex: 1;
+        }
+
         .navigationsleiste {
             display: flex;
             align-items: center;
@@ -21,11 +32,150 @@
             padding: 10px 20px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            /* Erlaubt die Zentrierung von Elementen innerhalb */
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .suchleiste {
+            position: absolute;
+            /* Absolute Positionierung relativ zum Header */
+            left: 50%;
+            /* Horizontal mittig im Header */
+            transform: translateX(-50%);
+            /* Exakte Zentrierung */
+            width: 300px;
+            /* Standardbreite */
+        }
+
+        .suchleiste input {
+            padding: 10px;
+            border-radius: 20px;
+            border: 3px solid #327347;
+            width: 100%;
+            outline: none;
+            text-align: center;
+        }
+
+        .icons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            /* Abstand zwischen Icons */
+        }
+
+        .icons span {
+            margin-left: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .linkleiste {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            background-color: #204f2e;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+            /* Zeilenumbruch ermöglichen */
+            gap: 10px;
+        }
+
+        .linkleiste a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            background-color: #e0e0e0;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .linkleiste a:hover {
+            background-color: #9a9797;
+        }
+
+        @media (max-width: 768px) {
+            .navigationsleiste {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .suchleiste {
+                width: 80%;
+            }
+
+            .icons {
+                justify-content: center;
+            }
+
+            .linkleiste {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .linkleiste a {
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navigationsleiste {
+                flex-direction: column;
+                /* Stapelt Logo, Suchleiste und Icons vertikal */
+                align-items: center;
+                /* Zentriert die Elemente */
+                text-align: center;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+                /* Abstand zwischen den Elementen */
+            }
+
+            .suchleiste {
+                position: static;
+                /* Hebt die absolute Positionierung auf */
+                transform: none;
+                /* Entfernt die Zentrierung durch Transform */
+                width: 80%;
+                /* Breite anpassen */
+                margin-bottom: 10px;
+                /* Abstand zwischen den Elementen */
+            }
+
+            .icons {
+                margin-bottom: 10px;
+                /* Abstand zwischen den Elementen */
+            }
+
+            .linkleiste {
+                flex-direction: row;
+                /* Elemente bleiben nebeneinander */
+                justify-content: center;
+                /* Zentriert die Links horizontal */
+                flex-wrap: wrap;
+                /* Links umbrechen, falls nötig */
+                gap: 10px;
+                /* Abstand zwischen Links */
+            }
+
+            .linkleiste a {
+                margin: 0;
+                /* Kein zusätzlicher Abstand erforderlich */
+            }
         }
 
         .inhalt {
             flex: 1;
-            padding: 20px;
+
         }
 
         .warenkorb-produkte {
@@ -80,6 +230,26 @@
             font-size: 18px;
             color: #777;
             margin-top: 50px;
+        }
+
+        .fusszeile {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .soziale-icons span,
+        .hilfe-icon span {
+            font-size: 20px;
+            margin-right: 10px;
         }
     </style>
     <script>
@@ -178,15 +348,48 @@
         window.onload = ladeWarenkorb;
     </script>
 </head>
+
 <body>
     <!-- Navigationsleiste -->
     <header class="navigationsleiste">
-        <a href="Startseite.html" class="logo"><img src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers" width="120"></a>
+        <a href="Startseite.html" class="logo"><img
+                src="https://21novastrategy.com/wp-content/uploads/2022/01/logo-scuffers.png" alt="scuffers"></a>
+        <div class="suchleiste">
+            <input type="text" placeholder="🔍 Suche eingeben..." onkeydown="handleSearch(event)">
+        </div>
+        <div class="icons">
+            <span class="icon" onclick="location.href='Favoriten.html'">❤️</span>
+            <span class="icon" onclick="location.href='Einkaufswagen.html'">🛒</span>
+            <span class="icon" onclick="location.href='Benutzerprofil.html'">👤</span>
+        </div>
     </header>
 
     <div class="inhalt">
-        <h1>Ihr Einkaufswagen</h1>
-        <div id="warenkorb-produkte" class="warenkorb-produkte"></div>
-    </div>
+        <!-- Linkleiste -->
+        <nav class="linkleiste">
+            <a href="Hoodie.html">Hoodie</a>
+            <a href="Pullover.html">Pullover</a>
+            <a href="T-Shirt.html">T-Shirt</a>
+            <a href="Jeans.html">Jeans</a>
+        </nav>
+
+        <div class="inhalt">
+            <h1>Ihr Einkaufswagen</h1>
+            <div id="warenkorb-produkte" class="warenkorb-produkte"></div>
+        </div>
+        <!-- Fußzeile -->
+        <footer class="fusszeile">
+            <div class="soziale-icons">
+                <a href="https://www.instagram.com/dhbwkarlsruhe/" target="_blank">📸</a>
+                <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://twitter.com/dhbw_karlsruhe&ved=2ahUKEwiqh5aIqMKJAxWV3QIHHfM6JfUQFnoECB8QAQ&usg=AOvVaw2PSJ6N5vn5L_BHyb978XOa"
+                    target="_blank">🐦</a>
+                <a href="https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.facebook.com/DHBWKarlsruhe/%3Flocale%3Dde_DE&ved=2ahUKEwjJntzZqMKJAxV6_7sIHQwDJigQFnoECBkQAQ&usg=AOvVaw0fHUL6nmdtThvt1ZFadl1e"
+                    target="_blank">📘</a>
+            </div>
+            <div class="hilfe-icon">
+                <span>❓</span>
+            </div>
+        </footer>
 </body>
+
 </html>
